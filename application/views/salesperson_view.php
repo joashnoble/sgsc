@@ -234,9 +234,9 @@
                                                 </div>
                                             </div><br><br>
                                             <div class="col-xs-12">
-                                                <label class="col-xs-12 col-md-4 control-label "><strong>Department :</strong></label>
+                                                <label class="col-xs-12 col-md-4 control-label "><strong><strong><font color="red">*</font> Department :</strong></label>
                                                 <div class="col-xs-12 col-md-8">
-                                                    <select name="department_id" id="cbo_department" class="form-control" data-error-msg="Department is required!" style="width: 100%;">
+                                                    <select name="department_id" id="cbo_department" class="form-control" required data-error-msg="Department is required!" style="width: 100%;">
                                                         <option value="0">[ Create New Department ]</option>
                                                         <?php foreach($departments as $department) { ?>
                                                             <option value="<?php echo $department->department_id; ?>"><?php echo $department->department_name; ?></option>
@@ -494,19 +494,25 @@
 
         var validateRequiredFields=function(frm){
             var stat=true;
-
             $('div.form-group').removeClass('has-error');
-            $('input[required],textarea[required]',frm).each(function(){
-                if($(this).val()==""){
-                    showNotification({
-                        title:"Error!",
-                        stat:"error",
-                        msg:$(this).data('error-msg')
-                    });
-                    $(this).closest('div.form-group').addClass('has-error');
-                    stat=false;
-                    return false;
-                }
+            $('input[required],textarea[required],select[required]',frm).each(function(){
+                    if($(this).is('select')){
+                        if($(this).val()==0 || $(this).val()==null || $(this).val()==undefined || $(this).val()==""){
+                            showNotification({title:"Error!",stat:"error",msg:$(this).data('error-msg')});
+                            $(this).closest('div.form-group').addClass('has-error');
+                            $(this).focus();
+                            stat=false;
+                            return false;
+                        }
+                    }else{
+                        if($(this).val()==""){
+                            showNotification({title:"Error!",stat:"error",msg:$(this).data('error-msg')});
+                            $(this).closest('div.form-group').addClass('has-error');
+                            $(this).focus();
+                            stat=false;
+                            return false;
+                        }
+                    }
             });
             return stat;
         };
