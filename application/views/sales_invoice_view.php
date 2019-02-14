@@ -1679,18 +1679,22 @@ $(document).ready(function(){
                 if(_txnMode=="new"){
                     createSalesInvoice().done(function(response){
                         showNotification(response);
-                        dt.row.add(response.row_added[0]).draw();
-                        clearFields($('#frm_sales_invoice'));
-                        showList(true);
+                        if(response.stat == 'success'){
+                            dt.row.add(response.row_added[0]).draw();
+                            clearFields($('#frm_sales_invoice'));
+                            showList(true);
+                        }
                     }).always(function(){
                         showSpinningProgress($('#btn_save'));
                     });
                 }else{
                     updateSalesInvoice().done(function(response){
                         showNotification(response);
-                        dt.row(_selectRowObj).data(response.row_updated[0]).draw();
-                        clearFields($('#frm_sales_invoice'));
-                        showList(true);
+                        if(response.stat == 'success'){
+                            dt.row(_selectRowObj).data(response.row_updated[0]).draw();
+                            clearFields($('#frm_sales_invoice'));
+                            showList(true);
+                        }
                     }).always(function(){
                         showSpinningProgress($('#btn_save'));
                     });

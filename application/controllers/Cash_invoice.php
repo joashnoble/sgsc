@@ -23,6 +23,8 @@ class Cash_invoice extends CORE_Controller
         $this->load->model('Trans_model');
         $this->load->model('Sales_invoice_model');
         $this->load->model('Customer_type_model');
+        $this->load->model('Soa_settings_model');
+        $this->load->model('Credit_ceiling_model');
     }
 
     public function index() {
@@ -169,6 +171,22 @@ class Cash_invoice extends CORE_Controller
                 $m_customers=$this->Customers_model;
                 $m_invoice->begin();
 
+                $accounts=$this->Soa_settings_model->get_list(null,'soa_account_id'); 
+                $acc = []; 
+                foreach ($accounts as $account) { $acc[]=$account->soa_account_id; } 
+                $filter_accounts =  implode(",", $acc);
+
+                $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
+                $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
+
+                if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                    $response['title'] = 'Error!';
+                    $response['stat'] = 'error';
+                    $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                    die(json_encode($response));
+                }
+
+
                 //treat NOW() as function and not string
                 $m_invoice->set('date_created','NOW()'); //treat NOW() as function and not string
                 $m_so=$this->Sales_order_model;
@@ -288,6 +306,21 @@ class Cash_invoice extends CORE_Controller
                 $m_invoice=$this->Cash_invoice_model;
                 $cash_invoice_id=$this->input->post('cash_invoice_id',TRUE);
                 $sales_inv_no=$this->input->post('cash_inv_no',TRUE);
+
+                $accounts=$this->Soa_settings_model->get_list(null,'soa_account_id'); 
+                $acc = []; 
+                foreach ($accounts as $account) { $acc[]=$account->soa_account_id; } 
+                $filter_accounts =  implode(",", $acc);
+
+                $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
+                $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
+
+                if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                    $response['title'] = 'Error!';
+                    $response['stat'] = 'error';
+                    $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                    die(json_encode($response));
+                }
 
                     $m_invoice->begin();
 

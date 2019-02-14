@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 date_default_timezone_set('Asia/Manila');
-$config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/sgs2019';
+$config['base_url'] = 'http://'.$_SERVER['SERVER_NAME'].'/sgsc';
 
 /*
 |--------------------------------------------------------------------------
