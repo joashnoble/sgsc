@@ -162,7 +162,7 @@
                                                     <h2 class="h2-panel-heading">Inventory Report</h2><hr>
 
                                                             <div class="row">
-                                                                <div class="col-lg-6">
+                                                                <div class="col-lg-4">
                                                                     Department * : <br />
                                                                     <select id="cbo_department" class="form-control">
                                                                         <option value="0">All Department</option>
@@ -181,6 +181,13 @@
                                                                         <option value="4">Equal to Zero</option>
 
                                                                     </select>
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    Filter Quantity >=<br />
+                                                                    <div class="input-group">
+                                                                        <input type="text" id="filter_goet_count" class="form-control numeric" value="">
+                                                                    </div>
+                                                                    <i title="Input a numbers only. Works as Greater than or Equal to. Leave blank when not needed.">Press Enter after input.</i>
                                                                 </div>
                                                                 <div class="col-lg-3">
                                                                     As of Date * :<br />
@@ -301,11 +308,8 @@
             });
             _cboCurrentCount.select2("val", 1);
             reloadList();
-
             createToolBarButton();
-
-
-
+            $('.numeric').autoNumeric('init', {mDec:0});
         }();
 
         var bindEventControls=function(){
@@ -332,13 +336,23 @@
                 reloadList();
                 createToolBarButton();
             });
+
+            $('#filter_goet_count').keypress(function(event){
+                if (event.keyCode == 13) {
+                    dt.clear().draw();
+                    dt.destroy();
+                    reloadList();
+                    createToolBarButton();
+                }
+            });
+
             $(document).on('click','#btn_print',function(){
-                window.open('Inventory/transaction/preview-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val());
+                window.open('Inventory/transaction/preview-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val()+'&goet_count='+$('#filter_goet_count').val());
             });
 
 
             $(document).on('click','#btn_export',function(){
-                window.open('Inventory/transaction/export-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val());
+                window.open('Inventory/transaction/export-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val()+'&goet_count='+$('#filter_goet_count').val());
             });
 
             $(document).on('click','#btn_email',function(){
@@ -349,7 +363,7 @@
                 $.ajax({
                     "dataType":"json",
                     "type":"POST",
-                    "url":'Inventory/transaction/email-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val(),
+                    "url":'Inventory/transaction/email-inventory?depid='+$('#cbo_department').val()+'&date='+$('#txt_date').val()+'&ccf='+$('#cbo_current_count').val()+'&goet_count='+$('#filter_goet_count').val(),
                     "beforeSend": showSpinningProgress(btn)
                 }).done(function(response){
                     showNotification(response);
@@ -454,7 +468,8 @@
                         return $.extend( {}, d, {
                             "depid": $('#cbo_department').val(),
                             "date" : $('#txt_date').val(),
-                            "ccf" : $('#cbo_current_count').val()
+                            "ccf" : $('#cbo_current_count').val(),
+                            "goet_count":$('#filter_goet_count').val(),
 
                         });
                     }

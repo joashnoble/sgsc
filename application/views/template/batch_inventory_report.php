@@ -72,8 +72,21 @@
         </tr>
     </table><hr>
 
-    <h3 style="margin-bottom: 0px;">Inventory Report - <?php echo $department; ?>
+    <h3 style="margin-bottom: 0px;">Inventory Report - <?php echo $department; ?> 
         </h3>
+    <?php if($_GET['ccf'] == '2'){
+        echo 'Quantity Greater than Zero';
+        }elseif ($_GET['ccf'] == '3') {
+        echo 'Quantity Less than Zero';
+        }elseif ($_GET['ccf'] == '4') {
+        echo 'Quantity Equal to Zero';
+        }elseif ($_GET['ccf'] == '1') {
+        echo 'All Quantity Counts';
+        } ?><br>
+        <?php if($_GET['goet_count'] !=''){
+            echo 'Quantity Greater than or Equal To '.$_GET['goet_count'];
+            } ?>
+            <br>
     <i>As of <?php echo $date; ?></i>
 
 

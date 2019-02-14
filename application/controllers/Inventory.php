@@ -46,6 +46,11 @@ class Inventory extends CORE_Controller
                 $date = date('Y-m-d',strtotime($this->input->post('date',TRUE)));
                 $depid = $this->input->post('depid',TRUE);
                 $currentcountfilter = $this->input->post('ccf',TRUE);
+                if($this->input->post('goet_count',TRUE)== ''){
+                    $goet_count = null;
+                }else {
+                    $goet_count = number_format($this->input->post('goet_count',TRUE));
+                }
 
                 $account_integration =$this->Account_integration_model;
                 $a_i=$account_integration->get_list();
@@ -57,7 +62,7 @@ class Inventory extends CORE_Controller
                 if($currentcountfilter  == 1){ $ccf = null; }else if ($currentcountfilter  == 2) { $ccf = ' > 0'; }
                 else if($currentcountfilter  == 3){ $ccf = ' < 0'; }else if($currentcountfilter  == 4){ $ccf = ' = 0';}
 
-                $response['data']=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$account_cii,$account_dis, $ccf);
+                $response['data']=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$account_cii,$account_dis,$ccf,$goet_count);
                 // $response['data'] = $m_products->get_product_list_inventory($date,$depid,$account);
 
 
@@ -82,7 +87,13 @@ class Inventory extends CORE_Controller
                 if($currentcountfilter  == 1){ $ccf = null; }else if ($currentcountfilter  == 2) { $ccf = ' > 0'; }
                 else if($currentcountfilter  == 3){ $ccf = ' < 0'; }else if($currentcountfilter  == 4){ $ccf = ' = 0';}
 
-                $data['products']=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis, $ccf);
+                if($this->input->get('goet_count',TRUE)== ''){
+                    $goet_count = null;
+                }else {
+                    $goet_count = number_format($this->input->get('goet_count',TRUE));
+                }
+
+                $data['products']=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis, $ccf,$goet_count);
                 // $data['products'] = $m_products->get_product_list_inventory($date,$depid,$account);
                 $data['date'] = date('m/d/Y',strtotime($date));
 
@@ -113,6 +124,12 @@ class Inventory extends CORE_Controller
                 $depid = $this->input->get('depid',TRUE);
                 $info = $m_department->get_department_list($depid);
                 $currentcountfilter = $this->input->get('ccf',TRUE);
+
+                if($this->input->get('goet_count',TRUE)== ''){
+                    $goet_count = null;
+                }else {
+                    $goet_count = number_format($this->input->get('goet_count',TRUE));
+                }
                 // Current Quantity Current Count Filter , 1 for ALL, 2 for Greater than 0, 3 for Less than Zero
                 if($currentcountfilter  == 1){ $ccf = null; }else if ($currentcountfilter  == 2) { $ccf = ' > 0'; }
                 else if($currentcountfilter  == 3){ $ccf = ' < 0'; }else if($currentcountfilter  == 4){ $ccf = ' = 0';}
@@ -120,7 +137,7 @@ class Inventory extends CORE_Controller
                 if($currentcountfilter  == 1){ $ccf_data = 'All Count Items'; }else if ($currentcountfilter  == 2) { $ccf_data = 'Items Greater than Zero'; }
                 else if($currentcountfilter  == 3){ $ccf_data = 'Items Less than Zero'; }else if($currentcountfilter  == 4){ $ccf_data = 'Items Equal to Zero';}
 
-                $products=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis,$ccf);
+                $products=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis,$ccf,$goet_count);
                 $data['date'] = date('m/d/Y',strtotime($date));
 
                 if(isset($info[0])){
@@ -129,6 +146,7 @@ class Inventory extends CORE_Controller
                     $department= 'All';
                 }
 
+                if($goet_count != ''){ $goet_count_text = 'and, Count Greater Than or Equal To '.$goet_count; }else { $goet_count_text =  '';};
                 $m_company_info=$this->Company_model;
                 $company_info=$m_company_info->get_list();
                 $data['company_info']=$company_info[0];
@@ -157,7 +175,7 @@ class Inventory extends CORE_Controller
                                         ->getStyle('A6')->getFont()->setBold(TRUE);
                 $excel->getActiveSheet()->setCellValue('A7','As of '.$date)
                                         ->getStyle('A7')->getFont()->setItalic(TRUE);
-                $excel->getActiveSheet()->setCellValue('A8',$ccf_data)
+                $excel->getActiveSheet()->setCellValue('A8',$ccf_data.' '.$goet_count_text)
                                         ->getStyle('A8')->getFont()->setItalic(TRUE);
 
                 $excel->getActiveSheet()->getColumnDimension('A')->setWidth('40');
@@ -264,6 +282,12 @@ class Inventory extends CORE_Controller
                 $depid = $this->input->get('depid',TRUE);
                 $info = $m_department->get_department_list($depid);
                 $currentcountfilter = $this->input->get('ccf',TRUE);
+                if($this->input->get('goet_count',TRUE)== ''){
+                    $goet_count = null;
+                }else {
+                    $goet_count = number_format($this->input->get('goet_count',TRUE));
+                }
+
                 // Current Quantity Current Count Filter , 1 for ALL, 2 for Greater than 0, 3 for Less than Zero
                 if($currentcountfilter  == 1){ $ccf = null; }else if ($currentcountfilter  == 2) { $ccf = ' > 0'; }
                 else if($currentcountfilter  == 3){ $ccf = ' < 0'; }else if($currentcountfilter  == 4){ $ccf = ' = 0';}
@@ -271,7 +295,7 @@ class Inventory extends CORE_Controller
                 if($currentcountfilter  == 1){ $ccf_data = 'All Count Items'; }else if ($currentcountfilter  == 2) { $ccf_data = 'Items Greater than Zero'; }
                 else if($currentcountfilter  == 3){ $ccf_data = 'Items Less than Zero'; }else if($currentcountfilter  == 4){ $ccf_data = 'Items Equal to Zero';}
 
-                $products=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis,$ccf);
+                $products=$m_products->product_list($account,$date,null,null,null,1,null,$depid,$ci_account,$account_dis,$ccf,$goet_count);
                 $data['date'] = date('m/d/Y',strtotime($date));
 
                 if(isset($info[0])){
@@ -283,7 +307,7 @@ class Inventory extends CORE_Controller
                 $m_company_info=$this->Company_model;
                 $company_info=$m_company_info->get_list();
                 $data['company_info']=$company_info[0];
-
+                if($goet_count != ''){ $goet_count_text = 'and, Count Greater Than or Equal To '.$goet_count; }else { $goet_count_text =  '';};
                 ob_start();
                 $excel->setActiveSheetIndex(0);
 
@@ -309,7 +333,7 @@ class Inventory extends CORE_Controller
                                         ->getStyle('A6')->getFont()->setBold(TRUE);
                 $excel->getActiveSheet()->setCellValue('A7','As of '.$date)
                                         ->getStyle('A7')->getFont()->setItalic(TRUE);
-                $excel->getActiveSheet()->setCellValue('A8',$ccf_data)
+                $excel->getActiveSheet()->setCellValue('A8',$ccf_data.' '.$goet_count_text)
                                         ->getStyle('A8')->getFont()->setItalic(TRUE);
                 $excel->getActiveSheet()->getColumnDimension('A')->setWidth('40');
                 $excel->getActiveSheet()->getColumnDimension('B')->setWidth('25');
