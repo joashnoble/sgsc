@@ -137,7 +137,7 @@ input {
                                                    <div class="form-group">
                                                        <label class="col-md-4  control-label"> <strong>Mobile  # :</strong></label>
                                                        <div class="col-md-8">
-                                                               <input  spellcheck="false" type="text" name="mobile_no" class="form-control" value="<?php echo $company->mobile_no; ?>" placeholder="Mobile #" data-error-msg="Mobile # is required!">
+                                                               <input  spellcheck="false" type="text" name="contact_no" class="form-control" value="<?php echo $company->mobile_no; ?>" placeholder="Mobile #" data-error-msg="Mobile # is required!">
                                                        </div>
                                                    </div>
 

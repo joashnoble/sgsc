@@ -488,7 +488,7 @@ echo $_side_bar_navigation;
                                         <span class="input-group-addon">
                                             <i class="fa fa-mobile"></i>
                                         </span>
-                                        <input type="text" name="mobile_no" id="mobile_no" class="form-control" placeholder="Mobile No">
+                                        <input type="text" name="contact_no" id="mobile_no" class="form-control" placeholder="Mobile No">
                                     </div>
                                 </div>
                             </div>
