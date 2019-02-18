@@ -42,7 +42,7 @@ class Rights_link_model extends CORE_Model{
                                           (31,'15','15-4','Inventory Report'),
                                           (32,'5','5-4','Salesperson Management'),
                                           (33,'2','2-6','Item Adjustment (Out)'),
-                                          (34,'8','8-3','Export Sales Summary'),
+                                          (34,'8','8-3','Salesperson Commission Report'),
                                           (35,'9','9-3','Export Trial Balance'),
                                           (36,'6','6-7','Setup Check Layout'),
                                           (37,'9','9-4','AR Schedule'),

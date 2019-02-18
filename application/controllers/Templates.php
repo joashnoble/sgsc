@@ -90,6 +90,9 @@ class Templates extends CORE_Controller {
         $this->load->model('Dispatching_invoice_model');
         $this->load->model('Dispatching_invoice_item_model');
 
+        $this->load->model('Salesperson_comm_model');
+        $this->load->model('Salesperson_comm_items_model');
+
         $this->load->model('Bir_2307_model');
         $this->load->model('Bir_2551m_model');
         $this->load->model('Months_model');
@@ -5270,6 +5273,37 @@ class Templates extends CORE_Controller {
                 $data['supplier_info']=$supplier_id[0];
                 echo $this->load->view('template/issuance_department_for_review',$data,TRUE); //details of the journal
 
+
+                break;
+
+            case 'salesperson-commission':
+
+                $m_company=$this->Company_model;
+                $company=$m_company->get_list();
+                $data['company_info']=$company[0];
+
+                $salesperson_comm_info_id=$filter_value;
+                $data['info'] = $this->Salesperson_comm_model->get_list(array('is_active'=>TRUE,'is_deleted'=>FALSE),
+                    '*,
+                    DATE_FORMAT(salesperson_comm_info.start_date,"%M %d %Y")as start_date,
+                    DATE_FORMAT(salesperson_comm_info.end_date,"%M %d %Y")as end_date'
+                    );
+                $data['items'] = $this->Salesperson_comm_items_model->get_list(array('salesperson_comm_info_id'=>$salesperson_comm_info_id),
+                    'salesperson_comm_items.*,
+                    salesperson.*',
+                    array(array('salesperson', 'salesperson.salesperson_id = salesperson_comm_items.salesperson_id','left'))
+                    );
+
+                
+
+                 if($type=='preview'){
+                    echo $this->load->view('template/salesperson_commission_content_wo_header',$data,TRUE); //details of the journal
+                    echo $this->load->view('template/salesperson_commission_content_menus',$data,TRUE);
+                 }
+                if($type=='contentview'){
+                   echo $this->load->view('template/salesperson_commission_content',$data,TRUE); //details of the journal 
+
+                }
 
                 break;
 

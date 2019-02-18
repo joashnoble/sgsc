@@ -744,7 +744,32 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"> <b class="required"> * </b> Credit Limit :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-file-code-o"></i>
+                                                    </span>
+                                                    <input type="text" name="credit_limit" id="credit_limit" class="form-control numeric" placeholder="Credit Limit" required data-error-msg="Credit Limit is required!">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"><b class="required"> * </b> Ceiling Amount :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-file-code-o"></i>
+                                                    </span>
+                                                    <input type="text" name="ceiling_amount" id="ceiling_amount" class="form-control numeric" placeholder="Ceiling Amount" required data-error-msg="Ceiling Amount is required!">
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- <div class="col-md-12">
                                             <div class="col-md-4" id="label">
                                                  <label class="control-label boldlabel" style="text-align:right;"> Term :</label>

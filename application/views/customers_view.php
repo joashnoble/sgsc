@@ -205,14 +205,19 @@
                         var _elem=$(this);
                         $.each(data,function(name,value){
                             if(_elem.attr('name')==name){
-                                _elem.val(value);
+                                if($(_elem).hasClass('numeric')){
+                                    _elem.val(accounting.formatNumber(value,2));
+                                }else{
+                                    _elem.val(value);
+                                }
+                                
                             }
                         });
                     });
 
                     /*$('img[name="img_user"]').attr('src',data.photo_path);
                     showList(false);*/
-
+                    $('.numeric').autoNumeric('init');
             });
 
             $('#tbl_customers tbody').on('click','button[name="remove_info"]',function(){
@@ -929,19 +934,32 @@
                                             </div>
                                         </div> -->
 
-                                        <!-- <div class="col-md-12">
+                                        <div class="col-md-12">
                                             <div class="col-md-4" id="label">
-                                                 <label class="control-label boldlabel" style="text-align:right;"> Credit Limit :</label>
+                                                 <label class="control-label boldlabel" style="text-align:right;"> <b class="required"> * </b> Credit Limit :</label>
                                             </div>
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-file-code-o"></i>
                                                     </span>
-                                                    <input type="text" name="credit_limit" id="credit_limit" class="form-control" placeholder="Credit Limit">
+                                                    <input type="text" name="credit_limit" id="credit_limit" class="form-control numeric" placeholder="Credit Limit" required data-error-msg="Credit Limit is required!">
                                                 </div>
                                             </div>
-                                        </div> -->
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;"><b class="required"> * </b> Ceiling Amount :</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-file-code-o"></i>
+                                                    </span>
+                                                    <input type="text" name="ceiling_amount" id="ceiling_amount" class="form-control numeric" placeholder="Ceiling Amount" required data-error-msg="Ceiling Amount is required!">
+                                                </div>
+                                            </div>
+                                        </div>
                                     
                                         <div class="col-md-12">
                                             <div class="col-md-4" id="label">

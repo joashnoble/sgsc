@@ -87,7 +87,8 @@ class Customers extends CORE_Controller {
                 $m_customers->department_id=$this->input->post('department_id',TRUE);
                 $m_customers->photo_path=$this->input->post('photo_path',TRUE);
                 $m_customers->term=$this->input->post('term',TRUE);
-                $m_customers->credit_limit=$this->input->post('credit_limit',TRUE);
+                $m_customers->credit_limit=$this->get_numeric_value($this->input->post('credit_limit',TRUE));
+                $m_customers->ceiling_amount=$this->get_numeric_value($this->input->post('ceiling_amount',TRUE));
 
                 $m_customers->set('date_created','NOW()');
                 $m_customers->posted_by_user=$this->session->user_id;
@@ -132,8 +133,8 @@ class Customers extends CORE_Controller {
                 $m_customers->department_id=$this->input->post('department_id',TRUE);
                 $m_customers->photo_path=$this->input->post('photo_path',TRUE);
                 $m_customers->term=$this->input->post('term',TRUE);
-                $m_customers->credit_limit=$this->input->post('credit_limit',TRUE);
-
+                $m_customers->credit_limit=$this->get_numeric_value($this->input->post('credit_limit',TRUE));
+                $m_customers->ceiling_amount=$this->get_numeric_value($this->input->post('ceiling_amount',TRUE));
                 $m_customers->set('date_created','NOW()');
                 $m_customers->posted_by_user=$this->session->user_id;
 
@@ -250,7 +251,8 @@ class Customers extends CORE_Controller {
                 $m_customers->department_id=$this->input->post('department_id',TRUE);
                 $m_customers->photo_path=$this->input->post('photo_path',TRUE);
                 $m_customers->term=$this->input->post('term',TRUE);
-                $m_customers->credit_limit=$this->input->post('credit_limit',TRUE);
+                $m_customers->credit_limit=$this->get_numeric_value($this->input->post('credit_limit',TRUE));
+                $m_customers->ceiling_amount=$this->get_numeric_value($this->input->post('ceiling_amount',TRUE));
                 $m_customers->customer_type_id=$this->input->post('customer_type_id',TRUE);
                 $m_customers->set('date_modified','NOW()');
                 $m_customers->modified_by_user=$this->session->user_id;
