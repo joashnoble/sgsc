@@ -1556,10 +1556,11 @@ $(document).ready(function(){
     };
 
     var getproduct=function(){
+       var product_type_id = 1; // Raw Material 
        return $.ajax({
            "dataType":"json",
            "type":"POST",
-           "url":"products/transaction/list",
+           "url":"products/transaction/list/"+product_type_id,
            "beforeSend": function(){
                 countproducts = products.local.length;
                 if(countproducts > 100){

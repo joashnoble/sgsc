@@ -8,7 +8,6 @@ class Sales_order extends CORE_Controller
     function __construct() {
         parent::__construct('');
         $this->validate_session();
-
         $this->load->model('Sales_order_model');
         $this->load->model('Sales_order_item_model');
         $this->load->model('Salesperson_model');
@@ -41,6 +40,11 @@ class Sales_order extends CORE_Controller
             array('salesperson.is_active'=>TRUE,'salesperson.is_deleted'=>FALSE),
             'salesperson_id, acr_name, CONCAT(firstname, " ", middlename, " ", lastname) AS fullname, firstname, middlename, lastname'
         );
+
+        $data['salespersons_create']=$this->Salesperson_model->get_list(
+            array('salesperson.is_active'=>TRUE,'salesperson.is_deleted'=>FALSE),
+            'salesperson_id, CONCAT(lastname," ,", firstname, " ", middlename) AS salesperson'
+        );        
 
         //data required by active view
         $data['customers']=$this->Customers_model->get_list(
@@ -588,6 +592,7 @@ class Sales_order extends CORE_Controller
                 'departments.department_id',
                 'departments.department_name',
                 'customers.customer_name',
+                'customers.salesperson_id as c_salesperson_id',
                 'order_status.order_status'
             ),
 

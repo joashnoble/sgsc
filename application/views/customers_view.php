@@ -61,7 +61,7 @@
     <script>
 
     $(document).ready(function(){
-        var dt; var _txnMode; var _selectedID; var _selectRowObj; var _selectedBranch; var _cboCustomerType;
+        var dt; var _txnMode; var _selectedID; var _selectRowObj; var _selectedBranch; var _cboCustomerType; var _cboSalesperson;
 
         /*$(document).ready(function(){
             $('#modal_filter').modal('show');
@@ -91,8 +91,9 @@
                     { targets:[2],data: "contact_name" },
                     { targets:[3],data: "address" },
                     { targets:[4],data: "contact_no" },
+                    { targets:[5],data: "salesperson" },
                     {
-                        targets:[5],
+                        targets:[6],
                         render: function (data, type, full, meta){
                             var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"   data-toggle="tooltip" data-placement="top" title="Edit" style="margin-left:-5px;"><i class="fa fa-pencil"></i> </button>';
                             var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info"  data-toggle="tooltip" data-placement="top" title="Move to trash" style="margin-right:-5px;"><i class="fa fa-trash-o"></i> </button>';
@@ -109,6 +110,10 @@
 
 
             _cboCustomerType=$("#cbo_customer_type").select2({
+                allowClear: false
+            });
+
+            _cboSalesperson=$("#cbo_salesperson").select2({
                 allowClear: false
             });
 
@@ -190,6 +195,7 @@
                     $('#branch').val(data.department_id);
                     $('#refcustomertype_id').val(data.refcustomertype_id);
                     _cboCustomerType.select2('val',data.customer_type_id);
+                    _cboSalesperson.select2('val',data.salesperson_id);
                     $('#term').val(data.term);
 
                     //alert(data.term);
@@ -664,6 +670,7 @@
                                                         <th>Contact Person</th>
                                                         <th style="width: 30%;">Address</th>
                                                         <th>Contact No</th>
+                                                        <th>Salesperson</th>
                                                         <th style="width: 15%;"><center>Action</center></th>
                                                     </tr>
                                                     </thead>
@@ -1003,7 +1010,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" style="margin-top: 8px;">
                                             <div class="col-md-4" id="label">
                                                  <label class="control-label boldlabel" style="text-align:right;">Customer Type :</label>
                                             </div>
@@ -1012,6 +1019,20 @@
                                                 <option value="0">None</option>
                                                 <?php foreach($customer_type as $customer_type){ ?>
                                                     <option value="<?php echo $customer_type->customer_type_id; ?>"><?php echo $customer_type->customer_type_name?></option>
+                                                <?php } ?>
+                                            </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12" style="margin-top: 8px;">
+                                            <div class="col-md-4" id="label">
+                                                 <label class="control-label boldlabel" style="text-align:right;">Salesperson :</label>
+                                            </div>
+                                            <div class="col-md-8" style="padding: 0px;">
+                                            <select name="salesperson_id" id="cbo_salesperson" style="width: 100%">
+                                                <option value="0">Any</option>
+                                                <?php foreach($salesperson as $salesperson){ ?>
+                                                    <option value="<?php echo $salesperson->salesperson_id; ?>"><?php echo $salesperson->salesperson?></option>
                                                 <?php } ?>
                                             </select>
                                             </div>

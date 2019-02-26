@@ -195,6 +195,7 @@
                                                         <th></th>
                                                         <th>PLU</th>
                                                         <th>Product Description</th>
+                                                        <th>Type</th>
                                                         <th>Category</th>
                                                         <th style="text-align: right;">Bulk</th>
                                                         <th style="text-align: right;">Retail</th>
@@ -286,6 +287,10 @@
                                                                 </select>
                                                             </div>
 
+                                                            <div class="form-group" style="margin-bottom:0px; vertical-align: middle;text-align: left;"><br>
+                                                                        <label  for="is_tax_exempt" style="text-align: left;vertical-align: middle;"><input type="checkbox" name="is_tax_exempt" class="" id="is_tax_exempt" style="transform: scale(2.0);">  &nbsp;&nbsp;Tax Exempt ?</label>
+
+                                                                </div>
 
 
                                                         </div>
@@ -341,6 +346,16 @@
                                                             <div class="col-lg-12">
                                                                 <div class="col-lg-6" style="margin:0px;">
                                                                 <div class="form-group" style="margin-bottom:0px;">
+                                                                    <label class=""><b class="required">*</b> Product Type :</label>
+
+                                                                    <select name="product_type_id" id="cbo_product_type" data-error-msg="Inverntory type is required.">
+                                                                        <?php foreach($product_type as $product_type){ ?>
+                                                                            <option value="<?php echo $product_type->product_type_id ?>"><?php echo $product_type->product_type_name; ?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="form-group" style="margin-bottom:0px;">
                                                                     <label class=""><b class="required">*</b> Inventory type :</label>
 
                                                                     <select name="item_type_id" id="cbo_item_type" data-error-msg="Inverntory type is required.">
@@ -350,7 +365,6 @@
                                                                             <option value="<?php echo $item_type->item_type_id ?>"><?php echo $item_type->item_type; ?></option>
                                                                         <?php } ?>
                                                                     </select>
-
                                                                 </div>
 
 
@@ -397,10 +411,6 @@
                                                                             </span>
                                                                         <input type="text" name="distributor_price" id="distributor_price" class="form-control numeric">
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-group" style="margin-bottom:0px; vertical-align: middle;text-align: left;"><br>
-                                                                        <label  for="is_tax_exempt" style="text-align: left;vertical-align: middle;"><input type="checkbox" name="is_tax_exempt" class="" id="is_tax_exempt" style="transform: scale(2.0);">  &nbsp;&nbsp;Tax Exempt ?</label>
-
                                                                 </div>
                                                             </div>
 
@@ -1059,7 +1069,7 @@
 
 $(document).ready(function(){
     var dt; var _txnMode; var _selectedID; var _selectRowObj; var _cboItemTypes; var _selectedProductType; var _isTaxExempt=0;
-    var _cboSupplier; var _cboCategory; var _cboTax; var _cboInventory; var _cboMeasurement; var _cboCredit; var _cboDebit;
+    var _cboSupplier; var _cboCategory; var _cboTax; var _cboInventory; var _cboProductType; var _cboMeasurement; var _cboCredit; var _cboDebit;
     var _cboTaxGroup;
     var _section_id; var _menu_id; var _child_unit_id;
     var _cboPrimaryUnit;
@@ -1089,9 +1099,10 @@ $(document).ready(function(){
                 },
                 { targets:[1],data: "product_code" },
                 { targets:[2],data: "product_desc" },
-                { targets:[3],data: "category_name" },
+                { targets:[3],data: "product_type_name" },
+                { targets:[4],data: "category_name" },
                 {
-                    targets:[4],data: "CurrentQty",
+                    targets:[5],data: "CurrentQty",
                     render: function (data, type, full, meta) {
                         if(isNaN(data)){
                             return 0.00;
@@ -1102,7 +1113,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    targets:[5],data: "CurrentQtyChild",
+                    targets:[6],data: "CurrentQtyChild",
                     render: function (data, type, full, meta) {
                         if(isNaN(data)){
                             return 0.00;
@@ -1113,7 +1124,7 @@ $(document).ready(function(){
                     }
                 },
                 {
-                    targets:[6],data: null,
+                    targets:[7],data: null,
                     render: function (data, type, full, meta){
                         var _attribute='';
                         //console.log(data.is_email_sent);
@@ -1128,7 +1139,7 @@ $(document).ready(function(){
 
                 },
                 {
-                    targets:[7],
+                    targets:[8],
                     render: function (data, type, full, meta){
                         var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"   data-toggle="tooltip" data-placement="top" title="Edit" style="margin-left:-5px;"><i class="fa fa-pencil"></i> </button>';
                         var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info"  data-toggle="tooltip" data-placement="top" title="Move to trash" style="margin-right:-5px;"><i class="fa fa-trash-o"></i> </button>';
@@ -1143,10 +1154,10 @@ $(document).ready(function(){
                      },
             "rowCallback":function( row, data, index ){
 
-                $(row).find('td').eq(4).attr({
+                $(row).find('td').eq(5).attr({
                     "align": "right"
                 });
-                $(row).find('td').eq(5).attr({
+                $(row).find('td').eq(6).attr({
                     "align": "right"
                 });
             }
@@ -1206,6 +1217,11 @@ $(document).ready(function(){
             placeholder: "Please select Inventory Type.",
             allowClear: false
         });
+
+        _cboProductType=$('#cbo_product_type').select2({
+            placeholder: "Please select Product Type.",
+            allowClear: false
+        });        
 
         _cboMeasurement=$('#product_unit').select2({
             placeholder: "Please select Bulk Unit.",
@@ -1736,6 +1752,7 @@ $(document).ready(function(){
             _cboBrands.select2('val',null);
             _cboTax.select2('val',null);
             _cboInventory.select2('val',null);
+            _cboProductType.select2('val',null);
             _cboMeasurement.select2('val',null);
             _child_unit_id.select2('val',null);
             _cboCredit.select2('val',0);
@@ -1775,6 +1792,7 @@ $(document).ready(function(){
             _cboCategory.select2('val',data.category_id);
             _cboTax.select2('val',data.tax_type_id);
             _cboInventory.select2('val',data.item_type_id);
+            _cboProductType.select2('val',data.product_type_id);
             _cboMeasurement.select2('val',data.parent_unit_id);
             _child_unit_id.select2('val',data.child_unit_id);
             _cboCredit.select2('val',data.income_account_id);
