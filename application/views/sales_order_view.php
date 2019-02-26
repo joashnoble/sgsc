@@ -658,7 +658,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-top: 8px;">
                                 <div class="col-md-4" id="label">
                                      <label class="control-label boldlabel" style="text-align:right;">Customer Type :</label>
                                 </div>
@@ -672,9 +672,23 @@
                                 </div>
                             </div>
 
-
-
+                            <div class="col-md-12" style="margin-top: 8px;">
+                                <div class="col-md-4" id="label">
+                                     <label class="control-label boldlabel" style="text-align:right;">Salesperson :</label>
+                                </div>
+                                <div class="col-md-8" style="padding: 0px;">
+                                <select name="salesperson_id_create" id="cbo_salesperson_create" style="width: 100%">
+                                    <option value="0">Any</option>
+                                    <?php foreach($salespersons_create as $salespersons_create){ ?>
+                                        <option value="<?php echo $salespersons_create->salesperson_id; ?>">
+                                            <?php echo $salespersons_create->salesperson; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="col-md-4">
                             <div class="col-md-12">
                                 <div class="col-md-12">
@@ -887,7 +901,7 @@ $(document).ready(function(){
     var dt; var _txnMode; var _selectedID; var _selectRowObj;
     var _cboDepartments; var _cboDepartment; var _cboSalesperson; var _cboCustomers; var _lookUpPrice; var products;
     var _line_unit; var _cboCustomerType;
-    var _cboCustomerTypeCreate;
+    var _cboCustomerTypeCreate; var _cboSalespersonCreate;
  
     /*var oTableItems={
         qty : 'td:eq(0)',
@@ -984,6 +998,7 @@ $(document).ready(function(){
             allowClear: true
         });
         _cboSalesperson.select2('val',null);
+        _cboSalesperson.select2('enable',false);
         /*_productType = $('#cbo_prodType').select2({
             placeholder: "Please select Product Type",
             allowClear: false
@@ -995,6 +1010,10 @@ $(document).ready(function(){
         });
 
         _cboCustomerTypeCreate=$("#cbo_customer_type_create").select2({
+            allowClear: false
+        });
+
+        _cboSalespersonCreate=$("#cbo_salesperson_create").select2({
             allowClear: false
         });
 
@@ -1312,15 +1331,34 @@ $(document).ready(function(){
 
         _cboCustomers.on("select2:select", function (e) {
             var i=$(this).select2('val');
-                if(i==0){ 
+
+            if(i==0){ 
                 clearFields($('#frm_customer'));
                 _cboCustomers.select2('val',null);
                 _cboCustomerTypeCreate.select2('val',0);
+                _cboCustomerType.select2('val',0);
+                _cboSalesperson.select2('val',false);
+                _cboSalesperson.select2('enable',false);
                 $('#modal_new_customer').modal('show');
-                 }
-            var obj_customers=$('#cbo_customers').find('option[value="' + i + '"]');
-            $('#cbo_customer_type').select2('val',obj_customers.data('customer_type'));
-            if(i==0){ _cboCustomerType.select2('val',0); }
+             }else{
+                var obj_customers=$('#cbo_customers').find('option[value="' + i + '"]');
+                $('#cbo_customer_type').select2('val',obj_customers.data('customer_type'));
+
+                getSalesperson(i).done(function(response){
+                    var rows = response.data[0];
+
+                    if(rows.salesperson_id == 0){
+                        _cboSalesperson.select2('val',null);
+                        _cboSalesperson.select2('enable',true);
+                    }else{
+                        _cboSalesperson.select2('val',rows.salesperson_id);
+                        _cboSalesperson.select2('enable',false);
+                    }
+
+                });
+
+             }
+
         });
 
         
@@ -1481,6 +1519,13 @@ $(document).ready(function(){
             $('#cbo_customers').select2('val',data.customer_id);
             $('#cbo_salesperson').select2('val',data.salesperson_id);
             $('#cbo_customer_type').select2('val',data.customer_type_id);
+
+            if(data.c_salesperson_id == 0){
+                _cboSalesperson.select2('enable',true);
+            }else{
+                _cboSalesperson.select2('enable',false);
+            }
+
             $.ajax({
                 url : 'Sales_order/transaction/items/'+data.sales_order_id,
                 type : "GET",
@@ -1705,6 +1750,15 @@ $(document).ready(function(){
                     $('#cbo_customers').append('<option value="'+_customer.customer_id+'" selected data-customer_type = "'+_customer.customer_type_id+'">'+ _customer.customer_name + '</option>');
                     $('#cbo_customers').select2('val',_customer.customer_id);
                     $('#cbo_customer_type').select2('val',_customer.customer_type_id);
+
+                    if(_customer.salesperson_id == 0){
+                        _cboSalesperson.select2('val',null);
+                        _cboSalesperson.select2('enable',true);
+                    }else{
+                        _cboSalesperson.select2('val',_customer.salesperson_id);
+                        _cboSalesperson.select2('enable',false);
+                    }
+
                 }).always(function(){
                     showSpinningProgress(btn);
                 });
@@ -1766,10 +1820,11 @@ $(document).ready(function(){
         return stat;
     };
     var getproduct=function(){
-       return $.ajax({
+        var product_type_id = 2; // Finish Good
+        return $.ajax({
            "dataType":"json",
            "type":"POST",
-           "url":"products/transaction/list",
+           "url":"products/transaction/list/"+product_type_id,
            "beforeSend": function(){
                 countproducts = products.local.length;
                 if(countproducts > 100){
@@ -1795,8 +1850,8 @@ $(document).ready(function(){
         var _data=$('#frm_sales_order,#frm_items,#frm_sales_order_printing').serializeArray();
         var tbl_summary=$('#tbl_sales_order_summary');
         _data.push({name : "remarks", value : $('textarea[name="remarks"]').val()});
+        _data.push({name : "salesperson_id", value: $('#cbo_salesperson').val()});
         
-
         _data.push({name : "total_after_discount", value: $('#td_total_after_discount').text()});
         _data.push({name : "summary_discount", value : tbl_summary.find(oTableDetails.discount).text()});
         _data.push({name : "summary_before_discount", value :tbl_summary.find(oTableDetails.before_tax).text()});
@@ -1816,6 +1871,8 @@ $(document).ready(function(){
         var _data=$('#frm_sales_order,#frm_items,#frm_sales_order_printing').serializeArray();
         var tbl_summary=$('#tbl_sales_order_summary');
         _data.push({name : "remarks", value : $('textarea[name="remarks"]').val()});
+        _data.push({name : "salesperson_id", value: $('#cbo_salesperson').val()});
+        
         _data.push({name : "total_after_discount", value: $('#td_total_after_discount').text()});
         _data.push({name : "summary_discount", value : tbl_summary.find(oTableDetails.discount).text()});
         _data.push({name : "summary_before_discount", value :tbl_summary.find(oTableDetails.before_tax).text()});
@@ -1831,6 +1888,16 @@ $(document).ready(function(){
             "beforeSend": showSpinningProgress($('#btn_save'))
         });
     };
+
+    var getSalesperson=function(id){
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Customers/transaction/getSalesperson",
+            "data":{customer_id : id}
+        });
+    };
+
     var removeIssuanceRecord=function(){
         return $.ajax({
             "dataType":"json",

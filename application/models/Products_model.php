@@ -1183,7 +1183,7 @@ Product Pick List
 
 */
 
-function product_list($account,$as_of_date=null,$product_id=null,$supplier_id=null,$category_id=null,$item_type_id=null,$pick_list=null,$depid=null,$account_cii,$account_dis=null,$CurrentQtyCount=null,$goet=null){
+function product_list($account,$as_of_date=null,$product_id=null,$supplier_id=null,$category_id=null,$item_type_id=null,$pick_list=null,$depid=null,$account_cii,$account_dis=null,$CurrentQtyCount=null,$goet=null,$product_type_id=null){
     $sql="
         ".($goet==null?"":" SELECT n.* FROM (")."
             SELECT main.*
@@ -1232,8 +1232,9 @@ function product_list($account,$as_of_date=null,$product_id=null,$supplier_id=nu
 
                 FROM
 
-                (SELECT p.*,c.category_name FROM products as p
+                (SELECT p.*,c.category_name, pt.product_type_name FROM products as p
                 LEFT JOIN categories as c ON c.category_id=p.category_id
+                LEFT JOIN product_type as pt ON pt.product_type_id=p.product_type_id
                 WHERE p.is_deleted = FALSE 
                 ".($product_id==NULL?"":" AND p.product_id = $product_id")."
 
@@ -1373,6 +1374,7 @@ function product_list($account,$as_of_date=null,$product_id=null,$supplier_id=nu
                 ".($supplier_id==null?"":" AND core.supplier_id='".$supplier_id."'")."
                 ".($category_id==null?"":" AND core.category_id='".$category_id."'")."
                 ".($item_type_id==null?"":" AND core.item_type_id='".$item_type_id."'")."
+                ".($product_type_id==null?"":" AND core.product_type_id='".$product_type_id."'")."
 
                 ORDER BY core.product_desc) as main
                 ".($pick_list==TRUE?" WHERE main.CurrentQty < main.product_warn ":" ")."

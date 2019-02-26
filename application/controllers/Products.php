@@ -31,6 +31,7 @@ class Products extends CORE_Controller
         $this->load->model('Company_model');
         $this->load->model('Trans_model');
         $this->load->model('Brands_model');
+        $this->load->model('Product_type_model');
     }
 
     public function index() {
@@ -57,6 +58,8 @@ class Products extends CORE_Controller
         $data['accounts'] = $this->Account_title_model->get_list('is_active= TRUE AND is_deleted = FALSE','account_id,account_title');
         $data['tax_types']=$this->Tax_model->get_list(array('tax_types.is_deleted'=>FALSE));
         $data['brands']= $this->Brands_model->get_brand_list();
+        $data['product_type']=$this->Product_type_model->get_list(array('is_deleted'=>FALSE));
+        
         // (in_array('5-1',$this->session->user_rights)? 
         // $this->load->view('products_view', $data)
         // :redirect(base_url('dashboard')));
@@ -70,13 +73,13 @@ class Products extends CORE_Controller
         }
     }
 
-    function transaction($txn = null) {
+    function transaction($txn = null,$id_filter=null) {
         switch ($txn) {
                 // Products List, All Sales and Cash Invoices are included in the computation. 
                 //Inventory Report is the only report where Cash and Sales invoice inclusion is optional
             case 'list':
                 $m_products = $this->Products_model;
-                $response['data']=$m_products->product_list(1,null,null,null,null,null,null,null,1);
+                $response['data']=$m_products->product_list(1,null,null,null,null,null,null,null,1,null,null,null,$id_filter);
                 // $response['data']=$this->response_rows(array('products.is_deleted'=>FALSE));
                 echo json_encode($response);
                 break;
@@ -115,6 +118,7 @@ class Products extends CORE_Controller
                 $m_products->supplier_id = $this->input->post('supplier_id', TRUE);
                 $m_products->category_id = $this->input->post('category_id', TRUE);
                 $m_products->refproduct_id = $this->input->post('refproduct_id', TRUE);
+                $m_products->product_type_id = $this->input->post('product_type_id', TRUE);
                 $m_products->item_type_id = $this->input->post('item_type_id', TRUE);
                 $m_products->income_account_id = $this->input->post('income_account_id', TRUE);
                 $m_products->expense_account_id = $this->input->post('expense_account_id', TRUE);
@@ -189,6 +193,7 @@ class Products extends CORE_Controller
                 $m_products->supplier_id = $this->input->post('supplier_id', TRUE);
                 $m_products->category_id = $this->input->post('category_id', TRUE);
                 $m_products->refproduct_id = $this->input->post('refproduct_id', TRUE);
+                $m_products->product_type_id = $this->input->post('product_type_id', TRUE);
                 $m_products->item_type_id = $this->input->post('item_type_id', TRUE);
                 $m_products->income_account_id = $this->input->post('income_account_id', TRUE);
                 $m_products->expense_account_id = $this->input->post('expense_account_id', TRUE);
@@ -478,14 +483,15 @@ class Products extends CORE_Controller
         return $this->Products_model->get_list(
             $filter,
 
-            'products.*,categories.category_name,suppliers.supplier_name,refproduct.product_type,item_types.item_type,account_titles.account_title',
+            'products.*,categories.category_name,suppliers.supplier_name,refproduct.product_type,item_types.item_type,account_titles.account_title, product_type.product_type_name',
 
             array(
                 array('suppliers','suppliers.supplier_id=products.supplier_id','left'),
                 array('refproduct','refproduct.refproduct_id=products.refproduct_id','left'),
                 array('categories','categories.category_id=products.category_id','left'),
                 array('item_types','item_types.item_type_id=products.item_type_id','left'),
-                array('account_titles','account_titles.account_id=products.income_account_id','left')
+                array('account_titles','account_titles.account_id=products.income_account_id','left'),
+                array('product_type','product_type.product_type_id=products.product_type_id','left')
             )
         );
     }

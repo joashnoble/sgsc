@@ -19,6 +19,7 @@ class Customers extends CORE_Controller {
         $this->load->model('Trans_model');
         $this->load->model('Customer_type_model');
         $this->load->model('Soa_settings_model');
+        $this->load->model('Salesperson_model');
 
     }
  
@@ -36,6 +37,8 @@ class Customers extends CORE_Controller {
             'is_deleted=FALSE'
         );
 
+        $data['salesperson']=$this->Salesperson_model->get_list(array('is_deleted'=>FALSE),array('salesperson_id, CONCAT(lastname," ,",firstname," ",middlename) as salesperson'));
+
         $data['departments'] = $this->Departments_model->get_list(array('departments.is_deleted'=>FALSE));
         $data['refcustomertype'] = $this->RefCustomerType_model->get_list(array('refcustomertype.is_deleted'=>FALSE));
         (in_array('5-3',$this->session->user_rights)? 
@@ -45,13 +48,17 @@ class Customers extends CORE_Controller {
     }
 
 
-    function transaction($txn=null){
+    function transaction($txn=null, $id_filter=null){
         switch($txn){
             //****************************************************************************************************************
             case 'list':
                 $m_customers=$this->Customers_model;
 
-                $response['data']=$m_customers->get_list('is_active=TRUE AND is_deleted=FALSE');
+                $response['data']=$m_customers->get_list('customers.is_active=TRUE AND customers.is_deleted=FALSE',
+                'customers.*,IF(customers.salesperson_id=0,"Any",CONCAT(salesperson.lastname," ,",salesperson.firstname," ",salesperson.middlename)) as salesperson',
+                array(
+                    array('salesperson','salesperson.salesperson_id=customers.salesperson_id','left')
+                ));
 
                 echo json_encode($response);
 
@@ -71,6 +78,13 @@ class Customers extends CORE_Controller {
                 echo json_encode($response);
                 break;
 
+            case 'getSalesperson':
+                $customer_id = $this->input->post('customer_id', TRUE);
+                $response['data'] = $this->Customers_model->get_list($customer_id);
+                echo json_encode($response);
+                break;
+
+
             //****************************************************************************************************************
             case 'create':
                 $m_customers=$this->Customers_model;
@@ -81,6 +95,7 @@ class Customers extends CORE_Controller {
                 $m_customers->address=$this->input->post('address',TRUE);
                 $m_customers->email_address=$this->input->post('email_address',TRUE);
                 $m_customers->customer_type_id=$this->input->post('customer_type_id',TRUE);
+                $m_customers->salesperson_id=$this->input->post('salesperson_id',TRUE);
                 $m_customers->contact_no=$this->input->post('contact_no',TRUE);
                 $m_customers->tin_no=$this->input->post('tin_no',TRUE);
                 $m_customers->refcustomertype_id=$this->input->post('refcustomertype_id',TRUE);
@@ -127,6 +142,7 @@ class Customers extends CORE_Controller {
                 $m_customers->address=$this->input->post('address',TRUE);
                 $m_customers->email_address=$this->input->post('email_address',TRUE);
                 $m_customers->customer_type_id=$this->input->post('customer_type_id_create',TRUE);
+                $m_customers->salesperson_id=$this->input->post('salesperson_id_create',TRUE);
                 $m_customers->contact_no=$this->input->post('contact_no',TRUE);
                 $m_customers->tin_no=$this->input->post('tin_no',TRUE);
                 $m_customers->refcustomertype_id=$this->input->post('refcustomertype_id',TRUE);
@@ -254,6 +270,7 @@ class Customers extends CORE_Controller {
                 $m_customers->credit_limit=$this->get_numeric_value($this->input->post('credit_limit',TRUE));
                 $m_customers->ceiling_amount=$this->get_numeric_value($this->input->post('ceiling_amount',TRUE));
                 $m_customers->customer_type_id=$this->input->post('customer_type_id',TRUE);
+                $m_customers->salesperson_id=$this->input->post('salesperson_id',TRUE);
                 $m_customers->set('date_modified','NOW()');
                 $m_customers->modified_by_user=$this->session->user_id;
 
@@ -335,11 +352,13 @@ class Customers extends CORE_Controller {
         return $this->Customers_model->get_list(
             $filter,
 
-            'customers.*,departments.department_name,refcustomertype.customer_type',
+            'customers.*,departments.department_name,refcustomertype.customer_type,
+            IF(customers.salesperson_id=0,"Any",CONCAT(salesperson.lastname," ,",salesperson.firstname," ",salesperson.middlename)) as salesperson',
 
             array(
                 array('departments','departments.department_id=customers.department_id','left'),
-                array('refcustomertype','refcustomertype.refcustomertype_id=customers.refcustomertype_id','left')
+                array('refcustomertype','refcustomertype.refcustomertype_id=customers.refcustomertype_id','left'),
+                array('salesperson','salesperson.salesperson_id=customers.salesperson_id','left')
             )
         );
     }
