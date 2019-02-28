@@ -1336,6 +1336,7 @@ $(document).ready(function(){
                 clearFields($('#frm_customer'));
                 _cboCustomers.select2('val',null);
                 _cboCustomerTypeCreate.select2('val',0);
+                _cboSalespersonCreate.select2('val',0);
                 _cboCustomerType.select2('val',0);
                 _cboSalesperson.select2('val',false);
                 _cboSalesperson.select2('enable',false);
@@ -1346,7 +1347,7 @@ $(document).ready(function(){
 
                 getSalesperson(i).done(function(response){
                     var rows = response.data[0];
-
+                    
                     if(rows.salesperson_id == 0){
                         _cboSalesperson.select2('val',null);
                         _cboSalesperson.select2('enable',true);

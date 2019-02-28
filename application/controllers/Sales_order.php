@@ -126,6 +126,7 @@ class Sales_order extends CORE_Controller
                         'sales_order.*',
                         'DATE_FORMAT(sales_order.date_order,"%m/%d/%Y") as date_order',
                         'customers.customer_name',
+                        'customers.salesperson_id as c_salesperson_id',
                         'order_status.order_status',
                         'departments.department_name'
                     ),

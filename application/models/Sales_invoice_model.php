@@ -685,6 +685,7 @@ GROUP BY n.customer_id HAVING total_balance > 0";
         departments.department_id,
         departments.department_name,
         customers.customer_name,
+        customers.salesperson_id as c_salesperson_id,
         sales_order.so_no,
 
 

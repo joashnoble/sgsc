@@ -228,7 +228,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label>Contact Person :</label><br/>
-                            <input type="text" name="contact_person" id="contact_person" class="form-control" required data-error-msg="Contact Person is required!" placeholder="Contact Person">
+                            <input type="text" name="contact_person" id="contact_person" class="form-control clr_cstmr" required data-error-msg="Contact Person is required!" placeholder="Contact Person">
                         </div>
                         <div class="col-sm-2">
                             <b class="required">*</b><label> Due Date :</label> <br />
@@ -243,7 +243,7 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <label>Address :</label><br>
-                            <input class="form-control" id="txt_address" type="text" name="address" placeholder="Customer Address">
+                            <input class="form-control clr_cstmr" id="txt_address" type="text" name="address" placeholder="Customer Address">
                         </div>
                     </div>
                 </div>
@@ -599,6 +599,22 @@
                                 </select>
                                 </div>
                             </div> 
+                            <div class="col-md-12" style="margin-top: 8px;">
+                                <div class="col-md-4" id="label">
+                                     <label class="control-label boldlabel" style="text-align:right;">Salesperson :</label>
+                                </div>
+                                <div class="col-md-8" style="padding: 0px;">
+                                <select name="salesperson_id_create" id="cbo_salesperson_create" style="width: 100%">
+                                    <option value="0">Any</option>
+                                    <?php foreach($salespersons_create as $salespersons_create){ ?>
+                                        <option value="<?php echo $salespersons_create->salesperson_id; ?>">
+                                            <?php echo $salespersons_create->salesperson; ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-12">
@@ -816,7 +832,7 @@
 $(document).ready(function(){
     var dt; var _txnMode; var _selectedID; var _selectRowObj; var _cboDepartments; var _cboDepartments; var _cboCustomers; var dt_so; var products; var changetxn;
      var _line_unit; var _cboCustomerType;
-    var _cboCustomerTypeCreate;
+    var _cboCustomerTypeCreate; var _cboSalespersonCreate;
 
     var oTableItems={
         qty : 'td:eq(0)',
@@ -928,7 +944,12 @@ $(document).ready(function(){
             allowClear: false
         });
 
+        _cboSalespersonCreate=$("#cbo_salesperson_create").select2({
+            allowClear: false
+        });
+
         _cboSalesperson.select2('val',null);
+        _cboSalesperson.select2('enable',false);
         _cboDepartments.select2('val', null);
         _cboDepartment.select2('val', null);
         _cboCustomers.select2('val',null);
@@ -1171,19 +1192,38 @@ $(document).ready(function(){
         });
         _cboCustomers.on("select2:select", function (e) {
             var i=$(this).select2('val');
+
             if(i==0){ //new customer
-                //clearFields($('#modal_new_customer').find('form'));
-                 clearFields($('#frm_customer_new'));
+                clearFields($('#frm_customer_new'));
+                _cboCustomers.select2('val',null);
                 _cboCustomerTypeCreate.select2('val',0);
+                _cboSalespersonCreate.select2('val',0);
                 _cboCustomerType.select2('val',0);
-                _cboCustomers.select2('val',null)
+                _cboSalesperson.select2('val',false);
+                _cboSalesperson.select2('enable',false);
+                $('.clr_cstmr').val("");
                 $('#modal_new_customer').modal('show');
+            }else{
+                var obj_customers=$('#cbo_customers').find('option[value="' + i + '"]');
+                $('#txt_address').val(obj_customers.data('address'));
+                $('#contact_person').val(obj_customers.data('contact'));
+                $('#cbo_customer_type').select2('val',obj_customers.data('customer_type'));
+
+                getSalesperson(i).done(function(response){
+                    var rows = response.data[0];
+                    
+                    if(rows.salesperson_id == 0){
+                        _cboSalesperson.select2('val',null);
+                        _cboSalesperson.select2('enable',true);
+                    }else{
+                        _cboSalesperson.select2('val',rows.salesperson_id);
+                        _cboSalesperson.select2('enable',false);
+                    }
+
+                });
+
             }
-            var obj_customers=$('#cbo_customers').find('option[value="' + i + '"]');
-            $('#txt_address').val(obj_customers.data('address'));
-            $('#contact_person').val(obj_customers.data('contact'));
-            $('#cbo_customer_type').select2('val',obj_customers.data('customer_type'));
-            if(i==0){ _cboCustomerType.select2('val',0); }
+
         });
         $('#btn_create_salesperson').click(function(){
             var btn=$(this);
@@ -1354,6 +1394,12 @@ $(document).ready(function(){
                 $('#cbo_department').select2('val',data.department_id);
                 $('#cbo_salesperson').select2('val',data.salesperson_id);
                 $('#cbo_customer_type').select2('val',data.customer_type_id);
+
+                if (data.c_salesperson_id == 0){
+                    _cboSalesperson.select2('enable',true);
+                }else{
+                    _cboSalesperson.select2('enable',false);
+                }
             });
             $('#modal_so_list').modal('hide');
             resetSummary();
@@ -1488,6 +1534,13 @@ $(document).ready(function(){
             $('#cbo_customers').select2('val',data.customer_id);
             $('#cbo_salesperson').select2('val',data.salesperson_id);
             $('#cbo_customer_type').select2('val',data.customer_type_id);
+
+            if(data.c_salesperson_id == 0){
+                _cboSalesperson.select2('enable',true);
+            }else{
+                _cboSalesperson.select2('enable',false);
+            }
+
             $.ajax({
                 url : 'Cash_invoice/transaction/items/'+data.cash_invoice_id,
                 type : "GET",
@@ -1809,6 +1862,7 @@ $(document).ready(function(){
         var _data=$('#frm_cash_invoice,#frm_items').serializeArray();
         var tbl_summary=$('#tbl_cash_invoice_summary');
         _data.push({name : "remarks", value : $('textarea[name="remarks"]').val()});
+        _data.push({name : "salesperson_id", value: $('#cbo_salesperson').val()});
 
         _data.push({name : "total_after_discount", value: $('#td_total_after_discount').text()});
         _data.push({name : "summary_discount", value : tbl_summary.find(oTableDetails.discount).text()});
@@ -1827,6 +1881,7 @@ $(document).ready(function(){
         var _data=$('#frm_cash_invoice,#frm_items').serializeArray();
         var tbl_summary=$('#tbl_cash_invoice_summary');
         _data.push({name : "remarks", value : $('textarea[name="remarks"]').val()});
+        _data.push({name : "salesperson_id", value: $('#cbo_salesperson').val()});
 
         _data.push({name : "total_after_discount", value: $('#td_total_after_discount').text()});
         _data.push({name : "summary_discount", value : tbl_summary.find(oTableDetails.discount).text()});
@@ -1842,6 +1897,16 @@ $(document).ready(function(){
             "beforeSend": showSpinningProgress($('#btn_save'))
         });
     };
+
+    var getSalesperson=function(id){
+        return $.ajax({
+            "dataType":"json",
+            "type":"POST",
+            "url":"Customers/transaction/getSalesperson",
+            "data":{customer_id : id}
+        });
+    };
+
     var removeIssuanceRecord=function(){
         return $.ajax({
             "dataType":"json",
