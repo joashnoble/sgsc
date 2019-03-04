@@ -2010,7 +2010,8 @@ $(document).ready(function(){
         var down_payment = parseFloat(accounting.unformat($('#down_payment').val()));
 
         var total_after_discount = (after_tax-(after_tax*($('#txt_overall_discount').val()/100)));
-        var total_dp_ca = commission+down_payment;
+        var total_dp_ca = down_payment;
+        // var total_dp_ca = commission+down_payment;
         var total_after_commission = parseFloat(total_after_discount) - parseFloat(total_dp_ca,2);
 
         if (_txnMode == "new"){
@@ -2023,6 +2024,7 @@ $(document).ready(function(){
             if (down_payment > total_after_discount){
                 showNotification({title:"Invalid",stat:"error",msg:"Down Payment must not be higher than total after discount."});
                 $('#down_payment').val('0.00');
+                $('#td_total_after_discount').html(accounting.formatNumber(total_after_discount,2));
                 return;
             }
         }else{
@@ -2037,6 +2039,7 @@ $(document).ready(function(){
                 if (down_payment > total_after_discount){
                     showNotification({title:"Invalid",stat:"error",msg:"Down Payment must not be higher than total after discount."});
                     $('#down_payment').val('0.00');
+                    $('#td_total_after_discount').html(accounting.formatNumber(total_after_discount,2));
                     return;
                 }
             }

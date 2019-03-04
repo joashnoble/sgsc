@@ -312,16 +312,22 @@
                                 <input id="txt_overall_discount" name="total_overall_discount" type="text" class="numeric form-control" value="0.00" />
                                 <input type="hidden" id="txt_overall_discount_amount" name="total_overall_discount_amount" class="numeric form-control" value="0.00" readonly></td>
 
-                                <td style="text-align: right;">Total After Discount:</td>
+                                <td style="text-align: right;"><strong>Total After Discount:</strong></td>
                                 <td id="td_total_after_discount" style="text-align: right">0.00</td>
 
-                                <td style="text-align: right;" colspan="2">Total before tax:</td>
+                                <td style="text-align: right;" colspan="2"><strong>Total before tax:</strong></td>
                                 <td id="td_total_before_tax" style="text-align: right">0.00</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="text-align: right;"><strong><i class="glyph-icon icon-star"></i> Tax :</strong></td>
-                                <td align="right" colspan="2" id="td_tax" color="red">0.00</td>
+                                <td style="text-align: right;"><strong><i class="glyph-icon icon-star"></i> Down Payment :</strong></td>
+                                <td align="right" color="red">
+                                    <input id="down_payment" name="down_payment" type="text" class="numeric form-control" value="0.00" />
+                                </td>
+
+                                <td style="text-align: right;"><strong><i class="glyph-icon icon-star"></i> Tax :</strong></td>
+                                <td align="right" id="td_tax" color="red">0.00</td>
+
                                 <td colspan="2"  style="text-align: right;"><strong><i class="glyph-icon icon-star"></i> Total After Tax :</strong></td>
                                 <td align="right" colspan="1" id="td_after_tax" color="red">0.00</td>
                                 <td></td>
@@ -1358,6 +1364,7 @@ $(document).ready(function(){
             $('#td_tax').html('0.00');
             $('#td_total_after_tax').html('0.00');
             $('#txt_overall_discount').val('0.00'); 
+            $('#down_payment').val('0.00');
             $('#txt_overall_discount_amount').val('0.00'); 
             $('#invoice_default').datepicker('setDate', 'today');
             $('#due_default').datepicker('setDate', 'today');
@@ -1640,6 +1647,10 @@ $(document).ready(function(){
         });
         //track every changes on numeric fields
         $('#txt_overall_discount').on('keyup',function(){
+            reComputeTotal();
+        });
+
+        $('#down_payment').on('keyup',function(){
             reComputeTotal();
         });
 
@@ -2009,6 +2020,18 @@ $(document).ready(function(){
             after_tax+=parseFloat(accounting.unformat($(oTableItems.total,$(this)).find('input.numeric').val()));
         });
 
+        var total_after_discount = (after_tax-(after_tax*($('#txt_overall_discount').val()/100)));
+        var down_payment = parseFloat(accounting.unformat($('#down_payment').val()));
+        var total_after_downpayment = parseFloat(total_after_discount) - parseFloat(down_payment);
+
+        if (changetxn == "active"){
+            if (down_payment > total_after_discount){
+                showNotification({title:"Invalid",stat:"error",msg:"Down Payment must not be higher than total after discount."});
+                $('#down_payment').val('0.00');
+                $('#td_total_after_discount').html(accounting.formatNumber(total_after_discount,2));
+                return;
+            }
+        }
 
         var tbl_summary=$('#tbl_cash_invoice_summary');
         tbl_summary.find(oTableDetails.discount).html(accounting.formatNumber(discounts,2));
@@ -2020,7 +2043,7 @@ $(document).ready(function(){
         $('#txt_overall_discount_amount').val(accounting.formatNumber(after_tax * ($('#txt_overall_discount').val() / 100),2));
         $('#td_total_before_tax').html(accounting.formatNumber(before_tax,2));
         $('#td_after_tax').html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
-        $('#td_total_after_discount').html(accounting.formatNumber(after_tax - (after_tax * ($('#txt_overall_discount').val() / 100)),2));
+        $('#td_total_after_discount').html(accounting.formatNumber(total_after_downpayment,2));
         $('#td_tax').html(accounting.formatNumber(inv_tax_amount,2));
                     $('#td_discount').html(accounting.formatNumber(discounts,2)); // unknown - must be referring to table summary but not on id given
     };

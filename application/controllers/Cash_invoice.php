@@ -221,6 +221,7 @@ class Cash_invoice extends CORE_Controller
                 $m_invoice->total_tax_amount=$this->get_numeric_value($this->input->post('summary_tax_amount',TRUE));
                 $m_invoice->total_after_tax=$this->get_numeric_value($this->input->post('summary_after_tax',TRUE));
                 $m_invoice->total_after_discount=$this->get_numeric_value($this->input->post('total_after_discount',TRUE));
+                $m_invoice->down_payment=$this->get_numeric_value($this->input->post('down_payment',TRUE));
                 $m_invoice->posted_by_user=$this->session->user_id;
                 $m_invoice->save();
 
@@ -353,6 +354,7 @@ class Cash_invoice extends CORE_Controller
                     $m_invoice->total_tax_amount=$this->get_numeric_value($this->input->post('summary_tax_amount',TRUE));
                     $m_invoice->total_after_tax=$this->get_numeric_value($this->input->post('summary_after_tax',TRUE));
                     $m_invoice->total_after_discount=$this->get_numeric_value($this->input->post('total_after_discount',TRUE));
+                    $m_invoice->down_payment=$this->get_numeric_value($this->input->post('down_payment',TRUE));
                     $m_invoice->address=$this->input->post('address',TRUE);
                     $m_invoice->modified_by_user=$this->session->user_id;
                     $m_invoice->modify($cash_invoice_id);
