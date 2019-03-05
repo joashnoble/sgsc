@@ -1675,19 +1675,17 @@ $(document).ready(function(){
             var discount=parseFloat(accounting.unformat(row.find(oTableItems.discount).find('input.numeric').val()));
             var qty=parseFloat(accounting.unformat(row.find(oTableItems.qty).find('input.numeric').val()));
             var tax_rate=parseFloat(accounting.unformat(row.find(oTableItems.tax).find('input.numeric').val()))/100;
-            if(discount>price){
+
+            if(discount>100){
                 showNotification({title:"Invalid",stat:"error",msg:"Discount must not greater than unit price."});
                 row.find(oTableItems.discount).find('input.numeric').val('0.00');
-                //$(this).trigger('keyup');
-                //return;
+                $(this).trigger('keyup');
+                return;
             }
-
-
 
             // var discounted_price=price-discount;
             // var line_total_discount=discount*qty;
             // var line_total=discounted_price*qty;
-
 
             var line_total = price*qty; //ok not included in the output (view) and not saved in the database
             var line_total_discount=line_total*(discount/100);  
@@ -2024,6 +2022,19 @@ $(document).ready(function(){
         var down_payment = parseFloat(accounting.unformat($('#down_payment').val()));
         var total_after_downpayment = parseFloat(total_after_discount) - parseFloat(down_payment);
 
+        var tbl_summary=$('#tbl_cash_invoice_summary');
+        tbl_summary.find(oTableDetails.discount).html(accounting.formatNumber(discounts,2));
+        tbl_summary.find(oTableDetails.before_tax).html(accounting.formatNumber(before_tax,2));
+        tbl_summary.find(oTableDetails.inv_tax_amount).html(accounting.formatNumber(inv_tax_amount,2));
+        tbl_summary.find(oTableDetails.after_tax).html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
+
+        $('#txt_overall_discount_amount').val(accounting.formatNumber(after_tax * ($('#txt_overall_discount').val() / 100),2));
+        $('#td_total_before_tax').html(accounting.formatNumber(before_tax,2));
+        $('#td_after_tax').html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
+        $('#td_total_after_discount').html(accounting.formatNumber(total_after_downpayment,2));
+        $('#td_tax').html(accounting.formatNumber(inv_tax_amount,2));
+        $('#td_discount').html(accounting.formatNumber(discounts,2)); // unknown - must be referring to table summary but not on id given
+
         if (changetxn == "active"){
             if (down_payment > total_after_discount){
                 showNotification({title:"Invalid",stat:"error",msg:"Down Payment must not be higher than total after discount."});
@@ -2032,20 +2043,6 @@ $(document).ready(function(){
                 return;
             }
         }
-
-        var tbl_summary=$('#tbl_cash_invoice_summary');
-        tbl_summary.find(oTableDetails.discount).html(accounting.formatNumber(discounts,2));
-        tbl_summary.find(oTableDetails.before_tax).html(accounting.formatNumber(before_tax,2));
-        tbl_summary.find(oTableDetails.inv_tax_amount).html(accounting.formatNumber(inv_tax_amount,2));
-        tbl_summary.find(oTableDetails.after_tax).html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
-
-
-        $('#txt_overall_discount_amount').val(accounting.formatNumber(after_tax * ($('#txt_overall_discount').val() / 100),2));
-        $('#td_total_before_tax').html(accounting.formatNumber(before_tax,2));
-        $('#td_after_tax').html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
-        $('#td_total_after_discount').html(accounting.formatNumber(total_after_downpayment,2));
-        $('#td_tax').html(accounting.formatNumber(inv_tax_amount,2));
-                    $('#td_discount').html(accounting.formatNumber(discounts,2)); // unknown - must be referring to table summary but not on id given
     };
     var resetSummary=function(){
         var tbl_summary=$('#tbl_cash_invoice_summary');

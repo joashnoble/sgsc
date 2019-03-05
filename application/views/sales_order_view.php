@@ -1662,10 +1662,9 @@ $(document).ready(function(){
             if(discount>100){
                 showNotification({title:"Invalid",stat:"error",msg:"Discount must not greater than unit price."});
                 row.find(oTableItems.discount).find('input.numeric').val('0.00');
-                //$(this).trigger('keyup');
-                //return;
+                $(this).trigger('keyup');
+                return;
             }
-
 
             // var discounted_price=price-discount; //
             // var line_total_discount=discount*qty; //
@@ -2014,7 +2013,18 @@ $(document).ready(function(){
         // var total_dp_ca = commission+down_payment;
         var total_after_commission = parseFloat(total_after_discount) - parseFloat(total_dp_ca,2);
 
-        if (_txnMode == "new"){
+        $('#td_total_after_discount').html(accounting.formatNumber(total_after_commission,2));
+        $('#td_after_tax').html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
+        $('#td_discount').html(accounting.formatNumber(discounts,2)); //unknown
+
+
+        var tbl_summary=$('#tbl_sales_order_summary');
+        tbl_summary.find(oTableDetails.discount).html(accounting.formatNumber(discounts,2));
+        tbl_summary.find(oTableDetails.before_tax).html(accounting.formatNumber(before_tax,2));
+        tbl_summary.find(oTableDetails.so_tax_amount).html(accounting.formatNumber(so_tax_amount,2));
+        tbl_summary.find(oTableDetails.after_tax).html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
+
+        if (changetxn == "active"){
             if (commission > total_after_discount){
                 showNotification({title:"Invalid",stat:"error",msg:"Commission must not be higher than total after discount."});
                 $('#commission').val('0.00');
@@ -2027,36 +2037,8 @@ $(document).ready(function(){
                 $('#td_total_after_discount').html(accounting.formatNumber(total_after_discount,2));
                 return;
             }
-        }else{
-
-            if (changetxn == "active"){
-                if (commission > total_after_discount){
-                    showNotification({title:"Invalid",stat:"error",msg:"Commission must not be higher than total after discount."});
-                    $('#commission').val('0.00');
-                    return;
-                }
-
-                if (down_payment > total_after_discount){
-                    showNotification({title:"Invalid",stat:"error",msg:"Down Payment must not be higher than total after discount."});
-                    $('#down_payment').val('0.00');
-                    $('#td_total_after_discount').html(accounting.formatNumber(total_after_discount,2));
-                    return;
-                }
-            }
-
         }
 
-
-        $('#td_total_after_discount').html(accounting.formatNumber(total_after_commission,2));
-        $('#td_after_tax').html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
-        $('#td_discount').html(accounting.formatNumber(discounts,2)); //unknown
-
-
-        var tbl_summary=$('#tbl_sales_order_summary');
-        tbl_summary.find(oTableDetails.discount).html(accounting.formatNumber(discounts,2));
-        tbl_summary.find(oTableDetails.before_tax).html(accounting.formatNumber(before_tax,2));
-        tbl_summary.find(oTableDetails.so_tax_amount).html(accounting.formatNumber(so_tax_amount,2));
-        tbl_summary.find(oTableDetails.after_tax).html('<b>'+accounting.formatNumber(after_tax,2)+'</b>');
 
     };
     var reInitializeNumeric=function(){
