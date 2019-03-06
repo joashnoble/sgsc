@@ -75,7 +75,7 @@ class Credit_ceiling_model extends CORE_Model{
 			    user_accounts AS ua ON ua.user_id = ji.created_by_user
 			        LEFT JOIN
 			    customers AS c ON c.customer_id = ji.customer_id 
-			    WHERE ji.is_active=TRUE AND ji.is_deleted=FALSE AND ji.customer_id=1 AND ja.account_id IN ($filter_accounts)
+			    WHERE ji.is_active=TRUE AND ji.is_deleted=FALSE AND ji.customer_id=$customer_id AND ja.account_id IN ($filter_accounts)
 			    
 			    ORDER BY date_txn,journal_id ASC) as m";
 
