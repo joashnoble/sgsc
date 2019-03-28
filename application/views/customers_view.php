@@ -244,6 +244,19 @@
                 });
             });
 
+                $("#searchbox_customers").keyup(function(){          
+                    dt 
+                        .search(this.value) 
+                        .draw(); 
+                }); 
+ 
+                $('#btn_print').click(function(){ 
+                   window.open('customers/transaction/print-masterfile'); 
+                });   
+ 
+                $('#btn_export').click(function(){ 
+                   window.open('customers/transaction/export-customer'); 
+                });   
 
                 $('input[name="file_upload[]"]').change(function(event){
                     var _files=event.target.files;
@@ -624,7 +637,9 @@
             background: transparent; 
             margin-right: 10px;
         }
-
+        #tbl_customers_filter{ 
+            display: none; 
+        } 
 
     </style>
 </head>
@@ -662,7 +677,20 @@
                                             </div>              -->                     
                                             <div class="panel-body table-responsive">
                                             <h2 class="h2-panel-heading">Customers</h2><hr>
-                                                <button class="btn btn-primary" id="btn_new" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;margin-bottom: 0px !important; float: left;" data-toggle="modal" data-target="" data-placement="left" title=" New product" ><i class="fa fa-plus"></i>  New Customer</button>
+                                            <div class="row"> 
+                                                <div class="col-lg-3"><br> 
+                                                <button class="btn btn-primary" id="btn_new" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;margin-bottom: 0px !important; float: left;" data-toggle="modal" data-target="" data-placement="left" title=" New product" ><i class="fa fa-plus"></i>  New Customer</button> 
+                                                </div> 
+                                                <div class="col-lg-offset-3 col-lg-3" style="text-align: right;"> 
+                                                &nbsp;<br> 
+                                                        <button class="btn btn-primary" id="btn_print" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Print Supplier Masterfile" ><i class="fa fa-print"></i> Print</button> &nbsp; 
+                                                        <button class="btn btn-success" id="btn_export" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Export Supplier Masterfile" ><i class="fa fa-file-excel-o"></i> Export</button> 
+                                                </div> 
+                                                <div class="col-lg-3"> 
+                                                        Search :<br /> 
+                                                         <input type="text" id="searchbox_customers" class="form-control"> 
+                                                </div> 
+                                            </div><br> 
                                                 <table id="tbl_customers" class="table table-striped" cellspacing="0" width="100%">
                                                     <thead class="">
                                                     <tr>
