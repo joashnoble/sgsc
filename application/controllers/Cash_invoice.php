@@ -183,12 +183,13 @@ class Cash_invoice extends CORE_Controller
 
                 $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
                 $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
-
-                if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
-                    $response['title'] = 'Error!';
-                    $response['stat'] = 'error';
-                    $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
-                    die(json_encode($response));
+                if($customer_info[0]->credit_limit > 0 ){
+                    if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                        $response['title'] = 'Error!';
+                        $response['stat'] = 'error';
+                        $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                        die(json_encode($response));
+                    }
                 }
 
 
@@ -320,12 +321,13 @@ class Cash_invoice extends CORE_Controller
 
                 $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
                 $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
-
-                if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
-                    $response['title'] = 'Error!';
-                    $response['stat'] = 'error';
-                    $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
-                    die(json_encode($response));
+                if($customer_info[0]->credit_limit > 0 ){
+                    if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                        $response['title'] = 'Error!';
+                        $response['stat'] = 'error';
+                        $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                        die(json_encode($response));
+                    }
                 }
 
                     $m_invoice->begin();

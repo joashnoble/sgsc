@@ -259,13 +259,15 @@ class Sales_invoice extends CORE_Controller
 
                 $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
                 $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
-
-                if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
-                    $response['title'] = 'Error!';
-                    $response['stat'] = 'error';
-                    $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
-                    die(json_encode($response));
+                if($customer_info[0]->credit_limit > 0 ){
+                    if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                        $response['title'] = 'Error!';
+                        $response['stat'] = 'error';
+                        $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                        die(json_encode($response));
+                    }
                 }
+
                 //get sales order id base on SO number
                 $m_so=$this->Sales_order_model;
                 $arr_so_info=$m_so->get_list(
@@ -419,12 +421,13 @@ class Sales_invoice extends CORE_Controller
 
                     $journal_balance = $this->Credit_ceiling_model->get_customer_credit_limit($this->input->post('customer',TRUE),$filter_accounts);
                     $customer_info=$this->Customers_model->get_list($this->input->post('customer',TRUE));
-
-                    if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
-                        $response['title'] = 'Error!';
-                        $response['stat'] = 'error';
-                        $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
-                        die(json_encode($response));
+                    if($customer_info[0]->credit_limit > 0 ){
+                        if($journal_balance[0]->balance > $customer_info[0]->credit_limit ){
+                            $response['title'] = 'Error!';
+                            $response['stat'] = 'error';
+                            $response['msg'] = 'Acounts Receivable exceeded Credit Limit.<br> Balance of '.number_format($journal_balance[0]->balance,2);
+                            die(json_encode($response));
+                        }
                     }
 
 
