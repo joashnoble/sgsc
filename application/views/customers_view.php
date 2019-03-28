@@ -170,6 +170,7 @@
                 _txnMode="new";
                 $('#modal_create_customer').modal('show');
                 clearFields($('#frm_customer'));
+                _cboSalesperson.select2('val',0)
                 $('#cbo_customer_type').select2('val', 0);
             });
 
