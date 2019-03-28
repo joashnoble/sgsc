@@ -258,6 +258,14 @@
                    window.open('customers/transaction/export-customer'); 
                 });   
 
+                $('#btn_print_salesperson').click(function(){ 
+                   window.open('customers/transaction/print-masterfile-by-salesperson'); 
+                });   
+ 
+                $('#btn_export_salesperson').click(function(){ 
+                   window.open('customers/transaction/export-customer-by-salesperson'); 
+                });   
+
                 $('input[name="file_upload[]"]').change(function(event){
                     var _files=event.target.files;
                     var data=new FormData();
@@ -681,10 +689,12 @@
                                                 <div class="col-lg-3"><br> 
                                                 <button class="btn btn-primary" id="btn_new" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;margin-bottom: 0px !important; float: left;" data-toggle="modal" data-target="" data-placement="left" title=" New product" ><i class="fa fa-plus"></i>  New Customer</button> 
                                                 </div> 
-                                                <div class="col-lg-offset-3 col-lg-3" style="text-align: right;"> 
+                                                <div class="col-lg-6" style="text-align: right;"> 
                                                 &nbsp;<br> 
                                                         <button class="btn btn-primary" id="btn_print" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Print Supplier Masterfile" ><i class="fa fa-print"></i> Print</button> &nbsp; 
-                                                        <button class="btn btn-success" id="btn_export" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Export Supplier Masterfile" ><i class="fa fa-file-excel-o"></i> Export</button> 
+                                                        <button class="btn btn-success" id="btn_export" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Export Supplier Masterfile" ><i class="fa fa-file-excel-o"></i> Export</button> &nbsp; 
+                                                        <button class="btn btn-primary" id="btn_print_salesperson" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Print Supplier Masterfile By Salesperson" ><i class="fa fa-print"></i> Print</button> &nbsp; 
+                                                        <button class="btn btn-success" id="btn_export_salesperson" style="text-transform: none; font-family: Tahoma, Georgia, Serif;padding: 6px 10px!important;" data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Export Supplier Masterfile By Salesperson" ><i class="fa fa-file-excel-o"></i> Export</button> 
                                                 </div> 
                                                 <div class="col-lg-3"> 
                                                         Search :<br /> 

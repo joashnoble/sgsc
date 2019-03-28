@@ -62,6 +62,15 @@ class Customers extends CORE_Controller {
  
             break; 
  
+             case 'print-masterfile-by-salesperson': 
+                $m_company_info=$this->Company_model; 
+                $company_info=$m_company_info->get_list(); 
+                $data['company_info']=$company_info[0]; 
+                $data['salesperson']=$this->Salesperson_model->get_list(array('is_deleted'=>FALSE),array('salesperson_id, CONCAT(lastname," ,",firstname," ",middlename) as salesperson'),null,'salesperson.lastname ASC');
+                $data['customers']=$this->Customers_model->get_list('is_active=TRUE AND is_deleted=FALSE',null,null,'customers.customer_name ASC'); 
+                    $this->load->view('template/customer_masterfile_by_salesperson_content',$data); 
+ 
+            break; 
             case 'export-customer': 
  
                 $excel = $this->excel; 
@@ -149,6 +158,126 @@ class Customers extends CORE_Controller {
                 $i++; 
  
                 } 
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); 
+                header('Content-Disposition: attachment;filename="Customer Masterfile '.date('M-d-Y',NOW()).'.xlsx"'); 
+                header('Cache-Control: max-age=0'); 
+                // If you're serving to IE 9, then the following may be needed 
+                header('Cache-Control: max-age=1'); 
+ 
+                // If you're serving to IE over SSL, then the following may be needed 
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past 
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified 
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1 
+                header ('Pragma: public'); // HTTP/1.0 
+ 
+                $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007'); 
+                $objWriter->save('php://output');             
+                      
+            break; 
+
+            case 'export-customer-by-salesperson': 
+ 
+                $excel = $this->excel; 
+ 
+                $m_company_info=$this->Company_model; 
+                $company_info=$m_company_info->get_list(); 
+                $data['company_info']=$company_info[0]; 
+                $salesperson=$this->Salesperson_model->get_list(array('is_deleted'=>FALSE),array('salesperson_id, CONCAT(lastname," ,",firstname," ",middlename) as salesperson'),null,'salesperson.lastname ASC');
+                $customers=$this->Customers_model->get_list('is_active=TRUE AND is_deleted=FALSE',null,null,'customers.customer_name ASC'); 
+                $excel->setActiveSheetIndex(0); 
+ 
+                $excel->getActiveSheet()->getColumnDimensionByColumn('A1:B1')->setWidth('30'); 
+                $excel->getActiveSheet()->getColumnDimensionByColumn('A2:C2')->setWidth('50'); 
+                $excel->getActiveSheet()->getColumnDimensionByColumn('A3')->setWidth('30'); 
+                $excel->getActiveSheet()->getColumnDimensionByColumn('A4')->setWidth('40'); 
+ 
+                //name the worksheet 
+                $excel->getActiveSheet()->setTitle("Customer Masterfile"); 
+                $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); 
+                $excel->getActiveSheet()->mergeCells('A1:B1'); 
+                $excel->getActiveSheet()->mergeCells('A2:C2'); 
+                $excel->getActiveSheet()->mergeCells('A3:B3'); 
+                $excel->getActiveSheet()->mergeCells('A4:B4'); 
+ 
+                $excel->getActiveSheet()->setCellValue('A1',$company_info[0]->company_name) 
+                                        ->setCellValue('A2',$company_info[0]->company_address) 
+                                        ->setCellValue('A3',$company_info[0]->landline.'/'.$company_info[0]->mobile_no) 
+                                        ->setCellValue('A4',$company_info[0]->email_address); 
+ 
+                $excel->getActiveSheet()->setCellValue('A6','Customer Masterfile') 
+                                        ->getStyle('A6')->getFont()->setBold(TRUE); 
+                $excel->getActiveSheet()->setCellValue('A7','') 
+                                        ->getStyle('A7')->getFont()->setItalic(TRUE); 
+                $excel->getActiveSheet()->setCellValue('A8','') 
+                                        ->getStyle('A8')->getFont()->setItalic(TRUE); 
+ 
+                $excel->getActiveSheet()->getColumnDimension('A')->setWidth('40'); 
+                $excel->getActiveSheet()->getColumnDimension('B')->setWidth('25'); 
+                $excel->getActiveSheet()->getColumnDimension('C')->setWidth('25'); 
+                $excel->getActiveSheet()->getColumnDimension('D')->setWidth('25'); 
+                $excel->getActiveSheet()->getColumnDimension('E')->setWidth('30'); 
+                $excel->getActiveSheet()->getColumnDimension('F')->setWidth('30'); 
+                $excel->getActiveSheet()->getColumnDimension('G')->setWidth('30'); 
+     
+ 
+                 $style_header = array( 
+ 
+                    'fill' => array( 
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID, 
+                        'color' => array('rgb'=>'CCFF99'), 
+                    ), 
+                    'font' => array( 
+                        'bold' => true, 
+                    ) 
+                ); 
+
+                 $style_header_name = array( 
+ 
+                    'fill' => array( 
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID, 
+                        'color' => array('rgb'=>'CCFFFF'), 
+                    ), 
+                    'font' => array( 
+                        'bold' => true, 
+                    ) 
+                ); 
+ 
+                $i = 8;
+                foreach ($salesperson as $sales) {
+
+                $excel->getActiveSheet()->setCellValue('A'.$i,$sales->salesperson)->mergeCells('A'.$i.':G'.$i);
+                $excel->getActiveSheet()->getStyle('A'.$i)->getFont()->setBold(true);
+                $excel->getActiveSheet()->getStyle('A'.$i)->getFont()->setItalic(false);
+                $excel->getActiveSheet()->getStyle('A'.$i.':G'.$i)->applyFromArray( $style_header_name ); 
+
+                $i++;
+                    $excel->getActiveSheet()->getStyle('A'.$i.':G'.$i)->applyFromArray( $style_header ); 
+                    $excel->getActiveSheet()->setCellValue('A'.$i,'Customer Name') 
+                                            ->getStyle('A'.$i)->getFont()->setBold(TRUE); 
+                    $excel->getActiveSheet()->setCellValue('B'.$i,'Contact Name') 
+                                            ->getStyle('B'.$i)->getFont()->setBold(TRUE); 
+                    $excel->getActiveSheet()->setCellValue('C'.$i,'Contact No') 
+                                            ->getStyle('C'.$i)->getFont()->setBold(TRUE); 
+                    $excel->getActiveSheet()->setCellValue('D'.$i,'Address') 
+                                            ->getStyle('D'.$i)->getFont()->setBold(TRUE); 
+                    $excel->getActiveSheet()->setCellValue('E'.$i,'Email Address') 
+                                            ->getStyle('E'.$i)->getFont()->setBold(TRUE); 
+                    $excel->getActiveSheet()->setCellValue('F'.$i,'TIN') 
+                                            ->getStyle('F'.$i)->getFont()->setBold(TRUE); 
+                    $i++; 
+                    foreach ($customers as $customer) { 
+                        if($customer->salesperson_id == $sales->salesperson_id){
+                            $excel->getActiveSheet()->setCellValue('A'.$i,$customer->customer_name) 
+                                                    ->setCellValue('B'.$i,$customer->contact_name) 
+                                                    ->setCellValue('C'.$i,$customer->contact_no) 
+                                                    ->setCellValue('D'.$i,$customer->address) 
+                                                    ->setCellValue('E'.$i,$customer->email_address) 
+                                                    ->setCellValue('F'.$i,$customer->tin_no); 
+                            $i++; 
+                        }
+                    } // end of customer foreach
+                $i++;
+                } // end of salesperson foreach
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); 
                 header('Content-Disposition: attachment;filename="Customer Masterfile '.date('M-d-Y',NOW()).'.xlsx"'); 
                 header('Cache-Control: max-age=0'); 
