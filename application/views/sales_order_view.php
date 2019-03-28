@@ -1820,11 +1820,10 @@ $(document).ready(function(){
         return stat;
     };
     var getproduct=function(){
-        var product_type_id = 2; // Finish Good
         return $.ajax({
            "dataType":"json",
            "type":"POST",
-           "url":"products/transaction/list/"+product_type_id,
+           "url":"products/transaction/list/",
            "beforeSend": function(){
                 countproducts = products.local.length;
                 if(countproducts > 100){
