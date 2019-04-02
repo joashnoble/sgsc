@@ -1853,7 +1853,7 @@ $(document).ready(function(){
                         dt.row.add(response.row_added[0]).draw();
                         clearFields($('#frm_product'))
                         // showList(true);
-                                    // showPanelActive('list');
+                                    showPanelActive('list');
                     }).always(function(){
                         // $('#modal_create_product').modal('toggle');
                         showSpinningProgress($('#btn_save'));
