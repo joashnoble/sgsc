@@ -179,7 +179,7 @@ WHERE book_type = 'SJE'
 AND ji.is_active = TRUE 
 AND ji.is_deleted = FALSE
 AND ji.customer_id=$customer_id
- ".($date = null ? "AND YEAR(ji.date_txn) = YEAR(NOW())" : "AND MONTH(ji.date_txn) $date AND YEAR(ji.date_txn) = YEAR(NOW())")."
+ ".($now == true ? "AND MONTH(ji.date_txn) = MONTH(NOW()) AND YEAR(ji.date_txn) <= YEAR(NOW())" : " AND ji.date_txn < DATE(CONCAT(YEAR(NOW()),'-',MONTH(NOW()),'-01')) ")."
 
 HAVING balance > 0
 ";
