@@ -138,7 +138,7 @@ $sql="SELECT main.* FROM(
         return $this->db->query($sql)->result();
 }
 
-    function get_customer_soa_final($date, $customer_id, $status, $payment_date,$filter_accounts){
+    function get_customer_soa_final($now, $customer_id, $status, $payment_date,$filter_accounts){
 $sql="
 SELECT 
 ji.journal_id,
@@ -751,7 +751,7 @@ GROUP BY n.customer_id HAVING total_balance > 0";
             GROUP BY main.salesperson_id";
         return $this->db->query($sql)->result();
     }
-    
+
     function get_sales_product_summary_list($start=null,$end=null){
         $sql="
         SELECT main.product_id,
