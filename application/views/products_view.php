@@ -1101,7 +1101,7 @@ $(document).ready(function(){
                 { targets:[2],data: "product_desc" },
                 { targets:[3],data: "product_type_name" },
                 { targets:[4],data: "category_name" },
-                {
+                { visible :false,
                     targets:[5],data: "CurrentQty",
                     render: function (data, type, full, meta) {
                         if(isNaN(data)){
@@ -1112,7 +1112,7 @@ $(document).ready(function(){
 
                     }
                 },
-                {
+                {visible :false,
                     targets:[6],data: "CurrentQtyChild",
                     render: function (data, type, full, meta) {
                         if(isNaN(data)){
@@ -1123,7 +1123,7 @@ $(document).ready(function(){
 
                     }
                 },
-                {
+                { visible :false,
                     targets:[7],data: null,
                     render: function (data, type, full, meta){
                         var _attribute='';
