@@ -185,7 +185,7 @@
                     <th>SO #</th>
                     <th>Order Date</th>
                     <th>Customer</th>
-                    <th>Remarks</th>
+                    <th width="25%">Remarks</th>
                     <th>Status</th>
                     <th><center>Action</center></th>
                     <th>id</th>                    
@@ -880,6 +880,7 @@
 <script src="assets/plugins/spinner/dist/ladda.min.js"></script>
 <script type="text/javascript" src="assets/plugins/datatables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="assets/plugins/datatables/ellipsis.js"></script>
 <!-- a range use moment.js same as full calendar plugin -->
 <script src="assets/plugins/fullcalendar/moment.min.js"></script>
 <!-- Data picker -->
@@ -959,7 +960,7 @@ $(document).ready(function(){
                 { targets:[1],data: "so_no" },
                 { targets:[2],data: "date_order" },
                 { targets:[3],data: "customer_name" },
-                { targets:[4],data: "remarks" },
+                { targets:[4],data: "remarks",render: $.fn.dataTable.render.ellipsis(70) },
                 { targets:[5],data: "order_status" },
                 {
                     targets:[6],
