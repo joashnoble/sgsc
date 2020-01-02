@@ -44,14 +44,9 @@
 .text-right{text-align: right;}
 </style>
 
-<div>
-
-    <div>
-        <?php include 'sgsc_header.php'; ?>
-    </div>
-
-    <br>
-    <table width="100%" class="" cellpadding="3" cellspacing="0">
+<div style="padding-left: 20px;padding-right: 20px;">
+        <br>
+    <table width="100%" class="" cellpadding="3" cellspacing="0" style="border: 0px!important;">
         <tr>
             <td width="35%"><strong style="font-size: 10pt;">CASH INVOICE</strong></td>
             <td width="30%"></td>
@@ -64,11 +59,11 @@
             <td colspan="4"></td>
         </tr>
     </table>
-    <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 9pt;">
+    <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 8pt;border: 0px!important;">
         <tr>
-            <td width="20%">CUSTOMER: </td>
+            <td width="16%">CUSTOMER: </td>
             <td width="29%" style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><strong><?php echo $info->customer_name; ?></strong></td>
-            <td width="10%"></td>
+            <td width="14%"></td>
 
             <td width="14%">DATE: </td>
             <td width="17%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($info->date_invoice),"m/d/Y"); ?></center></td>
@@ -94,10 +89,11 @@
 
             <td width="15%"></td>
             <td width="20%"></td>
-        </tr>               
+        </tr>                 
     </table> 
 
     <br>
+    <div style="padding-left: 10px;padding-right: 10px;">
     <center>
         <table width="100%" style="border-collapse: collapse;border-spacing: 0;font-family: tahoma;font-size: 11;">
             <thead>
@@ -176,7 +172,8 @@
             </tr>            
             </tfoot>
         </table><br /><br />
-    </center>
+    </center>        
+    </div>
 </div>
 
 

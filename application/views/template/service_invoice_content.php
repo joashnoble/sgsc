@@ -1,80 +1,98 @@
-        <style type="text/css">
-    body {
-            font-family: 'Calibri',sans-serif;
-            font-size: 12px;
-    }
-    @page {
-                    size: auto;   /* auto is the initial value */
-                    margin: .5in .5in 1in .5in; 
-    }
-/*    tr:hover {
-        transition: .4s;
-        background: #414141 !important;
-        color: white;
-    }
+    <style type="text/css">
 
-    tr:hover .btn {
-        border-color: #494949!important;
-        border-radius: 0!important;
-        -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
-        -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
-        box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
-    }*/
-.left {border-left: 1px solid black;}
-.right{border-right: 1px solid black;}
-.bottom{border-bottom: 1px solid black;}
-.top{border-top: 1px solid black;}
+            body {
+                font-family: 'Calibri',sans-serif;
+                font-size: 12px;
+            }
 
-.fifteen{ width: 15%; }
-.text-center{text-align: center;}
-.text-right{text-align: right;}
-        </style>
-    <table width="100%" cellspacing="0" cellpadding="0">
-        <tr class="row_child_tbl_sales_order" style="height: 100px;" >
-            <td class="bottom-only" width="10%" style="border-bottom:1px solid black;object-fit:cover; "><img src="<?php echo $company_info->logo_path; ?>" style="height: 90px;  text-align: left;"></td>
-            <td  class="bottom-only" style="border-bottom:1px solid black;"  width="60%" class="">
-                <h1 class="report-header" style="padding-left: 30px;"><strong><?php echo $company_info->company_name; ?></strong></h1>
-                <p style="padding-left: 30px;"><?php echo $company_info->company_address; ?></p>
-                <p style="padding-left: 30px;"> <?php echo $company_info->landline.'/'.$company_info->mobile_no; ?></p>
-                <span><?php echo $company_info->email_address; ?></span><br>
+            @page {
+                size: auto;   /* auto is the initial value */
+                margin: .5in .5in 1in .5in; 
+            }
 
-            </td>
-            <td width="30%" style="border: 1px solid black;">
-                <center><h2>SERVICE INVOICE</h2></center>
-                <hr style="color:black!important">
-                <?php echo $service->service_invoice_no?>
-            </td>
-        </tr>
-    </table>
-    <table width="100%" cellpadding="5" cellspacing="0">
-        <tr>
-            <td class="left bottom fifteen" ><span>Customer Name:</span></td>
-            <td class="bottom "><?php echo $service->customer_name?></td>
-                <td class="left bottom fifteen">Date:</td>
-                <td class="bottom right "><?php echo  date_format(new DateTime($service->date_invoice ),"m/d/Y"); ?></td>
-        </tr>
-        <tr>
-            <td class="left bottom "><span>Contact Person:</span></td>
-            <td class="bottom "><?php echo $service->contact_person ?></td>
-                <td class="left bottom ">Department:</td>
-                <td  class="bottom right "><?php echo $service->department_name ?></td>
-        </tr>
-        <tr>
-            <td class="left bottom "><span>Due Date</span></td>
-            <td class="bottom "><?php echo  date_format(new DateTime($service->date_due),"m/d/Y"); ?></td>
-                <td class="left bottom ">Salesperson</td>
-                <td  class="bottom right "><?php echo $service->firstname ?> <?php echo $service->lastname ?></td>
-        </tr>
-    </table>
+            /*    
+
+            tr:hover {
+                transition: .4s;
+                background: #414141 !important;
+                color: white;
+            }
+
+            tr:hover .btn {
+                border-color: #494949!important;
+                border-radius: 0!important;
+                -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+                -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+                box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+            }*/
+
+        .left {border-left: 1px solid black;}
+        .right{border-right: 1px solid black;}
+        .bottom{border-bottom: 1px solid black;}
+        .top{border-top: 1px solid black;}
+        .fifteen{ width: 15%; }
+        .text-center{text-align: center;}
+        .text-right{text-align: right;}
+
+    </style>
+
+    <div>
+        <?php include 'sgsc_header.php'; ?>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <table width="100%" class="" cellpadding="3" cellspacing="0">
+            <tr>
+                <td width="35%"><strong style="font-size: 12pt;">SERVICE INVOICE</strong></td>
+                <td width="30%"></td>
+                <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
+                <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
+                    <center><strong><?php echo $service->service_invoice_no; ?></strong></center>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+            </tr>
+        </table>
+        
+        <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 9pt;">
+            <tr>
+                <td width="15%">Customer: </td>
+                <td width="30%" style="border-bottom: 1px solid black;font-size: 10pt;padding-bottom: 0px!important;"><strong><?php echo $service->customer_name; ?></strong></td>
+                <td width="25%"></td>
+
+                <td width="7%">Date: </td>
+                <td width="5%"></td>
+                <td width="18%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo  date_format(new DateTime($service->date_invoice ),"m/d/Y"); ?></td>
+            </tr>
+            <tr>
+                <td width="15%">Contact Person:</td>
+                <td width="30%" class="bottom"><?php echo $service->contact_person; ?></td>
+                <td width="20%"></td>
+                <td width="10%">Department:</td>
+                <td width="7%"></td>
+                <td width="18%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $service->department_name ?></td>
+            </tr>    
+            <tr>
+                <td width="15%">Due Date:</td>
+                <td width="30%" class="bottom"><?php echo  date_format(new DateTime($service->date_due),"m/d/Y"); ?></td>
+                <td width="20%"></td>
+                <td width="12%">Salesperson:</td>
+                <td width="5%"></td>
+                <td width="18%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $service->firstname ?> <?php echo $service->lastname ?></td>
+            </tr>
+                    
+        </table>      
+    </div>
+    <br>
     <table width="100%"  style="font-family: tahoma;font-size: 11;" cellspacing="0" cellpadding="5">
             <thead>
 
             <tr>
-                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="left bottom">Item Qty</th>
-                <th width="50%" style="text-align: left;height: 30px;padding: 6px;" class="bottom left">Item Description</th>
-                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom left">UM</th>
-                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom left">Unit Cost</th>
-                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom right left">Total</th>
+                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="left top bottom">Item Qty</th>
+                <th width="50%" style="text-align: left;height: 30px;padding: 6px;" class="bottom top left">Item Description</th>
+                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom top left">UM</th>
+                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom top left">Unit Cost</th>
+                <th width="12%" style="text-align: center;height: 30px;padding: 6px;" class="bottom top right left">Total</th>
             </tr>
             </thead>
             <tbody>
@@ -107,10 +125,25 @@
             <td colspan="6" style="text-align: left;font-weight: bolder; ;height: 30px;padding: 6px;" class="right left bottom"><?php echo $service->remarks; ?></td>
             </tr>
                 <tr>
-                <td colspan="2" class="left ">Prepared By:</td>
-                <td colspan="2" class="left">Date Received:</td>
+                <td colspan="2" class="left ">Prepared by:</td>
+                <td colspan="2" class="left">Confirmed by:</td>
 
-                <td colspan="2" class="left right">Received By:</td>
+                <td colspan="2" class="left right">Check by:</td>
+                </tr>
+                <tr style="">
+                    <td style="width: 15%" class="text-left left bottom"> <br><br><br></td>
+                    <td style="width: 20%" class="bottom"></td>
+                    <td style="width: 10%" class="text-right left bottom"> </td>
+                    <td style="width: 20%" class="bottom"> </td>
+                    <td style="width: 15%" class="text-left left bottom"></td>
+                    <td style="width: 20%" class="right bottom"></td>
+                </tr>
+
+                <tr>
+                <td colspan="2" class="left ">Certified by:</td>
+                <td colspan="2" class="left">Approved by:</td>
+
+                <td colspan="2" class="left right">Date Received:</td>
                 </tr>
                 <tr style="">
                     <td style="width: 15%" class="text-left left bottom"> <br><br><br></td>

@@ -51,7 +51,7 @@
     <div class="row">
         <table width="100%" class="" cellpadding="5">
             <tr>
-                <td width="35%"><strong style="font-size: 10pt;">PURCHASE ORDER</strong></td>
+                <td width="35%"><strong style="font-size: 10pt;">SALES ORDER</strong></td>
                 <td width="35%"></td>
                 <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
                 <td width="23%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
@@ -62,8 +62,8 @@
         <table width="100%" class="" cellpadding="5">
             <tr>
                 <td width="10%">SOLD TO: </td>
-                <td width="25%" style="border-bottom: 1px solid black;font-size: 10pt;padding-bottom: 0px!important;"><strong><?php echo $sales_order->customer_name; ?></strong></td>
-                <td width="35%"></td>
+                <td width="50%" style="border-bottom: 1px solid black;font-size: 10pt;padding-bottom: 0px!important;"><strong><?php echo $sales_order->customer_name; ?></strong></td>
+                <td width="5%"></td>
                 <td width="7%">DATE: </td>
 
                 <td width="10%"></td>
@@ -73,8 +73,8 @@
         <table  width="100%" class="" cellpadding="5">
             <tr>
                 <td width="18%">Contact Person/Cell #</td>
-                <td align="right" width="17%"><?php echo $sales_order->contact_no; ?></td>
-                <td width="35%"></td>
+                <td width="42%"><?php echo $sales_order->contact_no; ?></td>
+                <td width="5%"></td>
                 <td width="7%">TERMS:</td>
                 <td width="10%"></td>
                 <td width="13%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $sales_order->terms; ?></td>

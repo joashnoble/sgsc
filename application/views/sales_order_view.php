@@ -1280,6 +1280,8 @@ $(document).ready(function(){
     }();
     var bindEventHandlers=(function(){
         var detailRows = [];
+
+        
         $('#tbl_sales_order tbody').on( 'click', 'tr td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = dt.row( tr );
@@ -1309,7 +1311,9 @@ $(document).ready(function(){
                     }
                 });
             }
-        } );
+        });
+
+
         //loads modal to create new department
         _cboDepartments.on('select2:select', function(){
             if (_cboDepartments.val() == 0) {

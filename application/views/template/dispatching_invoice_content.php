@@ -45,62 +45,68 @@
 </style>
 
 <div>
-    <table width="100%" cellspacing="5" cellspacing="0">
-        <tr>
-            <td width="10%"  class="bottom"><img src="<?php echo base_url($company_info->logo_path); ?>" style="height: 90px; width: 120px; text-align: left;"></td>
-            <td width="60%"  class="bottom" >
-                <h1 class="report-header" style="margin-bottom: 0"><strong><?php echo $company_info->company_name; ?></strong></h1>
-                <span><?php echo $company_info->company_address; ?></span><br>
-                <span><?php echo $company_info->landline.'/'.$company_info->mobile_no; ?></span><br>
-                <span><?php echo $company_info->email_address; ?></span><br>
 
-            </td>
-            <td width="30%" class="top left right bottom">
-                <center><h2>DISPATCHING NO.</h2></center>
-                <hr style="color:black!important">
-                <?php echo $dis_info->dispatching_inv_no; ?>
+    <div>
+        <?php include 'sgsc_header.php'; ?>
+    </div>
+    <br>
+    <table width="100%" class="" cellpadding="3" cellspacing="0">
+        <tr>
+            <td width="35%"><strong style="font-size: 10pt;">DISPATCHING INVOICE</strong></td>
+            <td width="30%"></td>
+            <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
+            <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
+                <center><strong><?php echo $dis_info->dispatching_inv_no; ?></strong></center>
             </td>
         </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
     </table>
-    <table cellspacing="0" cellpadding="5" width="100%">
-    <tr>
-        <td class="bottom left  fifteen">Customer:</td>
-        <td class="bottom"><?php echo $dis_info->customer_name; ?></td>
-        <td class="bottom left  fifteen">Date:</td>
-        <td class="bottom right"><?php echo  date_format(new DateTime($dis_info->date_invoice),"m/d/Y"); ?></td>
-    </tr>
-    <tr>
-        <td class="bottom left ">Contact Person:</td>
-        <td class="bottom"><?php echo $dis_info->contact_person; ?></td>
-        <td class="bottom left ">Due Date:</td>
-        <td class="bottom right"><?php echo  date_format(new DateTime($dis_info->date_due),"m/d/Y"); ?></td>
-    </tr>
-    <tr>
-        <td class="bottom left ">Invoice No:</td>
-        <td class="bottom">
-            <?php if($dis_info->sales_invoice_id > 0){
-                 echo $dis_info->sales_inv_no;   
+    <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 8pt;">
+        <tr>
+            <td width="16%">CUSTOMER: </td>
+            <td width="29%" style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><strong><?php echo $dis_info->customer_name; ?></strong></td>
+            <td width="14%"></td>
+
+            <td width="14%">DATE: </td>
+            <td width="17%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($dis_info->date_invoice),"m/d/Y"); ?></center></td>
+        </tr>
+        <tr>
+            <td>CONTACT PERSON: </td>
+            <td style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><?php echo $dis_info->contact_person; ?></td>
+            <td></td>
+
+            <td>DUE DATE:</td>
+            <td style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($dis_info->date_due),"m/d/Y"); ?></center></td>
+        </tr>  
+        <tr>
+            <td>INVOICE NO: </td>
+            <td style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;">
+            <?php 
+                if($dis_info->sales_invoice_id > 0){
+                    echo $dis_info->sales_inv_no;   
                 }else if($dis_info->cash_invoice_id > 0){
                     echo $dis_info->cash_inv_no;
-
-
-                    } ?>
-
-        </td>
-        <td class="bottom left ">From:</td>
-        <td class="bottom right"><?php echo $dis_info->department_name; ?></td>
-    </tr>
+                } 
+            ?>                
+            </td>
+            <td></td>
+            <td>FROM:</td>
+            <td style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $dis_info->department_name; ?></td>
+        </tr>              
     </table>
+    <br>
     <center>
         <table width="100%" style="border-collapse: collapse;border-spacing: 0;font-family: tahoma;font-size: 11">
             <thead>
             <tr>
-                <th width="50%" class="bottom left " style="text-align: left;height: 30px;padding: 6px;">Item</th>
-                <th width="12%" class="bottom left" style="text-align: center;height: 30px;padding: 6px;">Qty</th>
-                <th width="12%" class="bottom left" style="text-align: center;height: 30px;padding: 6px;">UM</th>
-                <th width="12%" class="bottom left" style="text-align: right;height: 30px;padding: 6px;">Price</th>
-                <th width="12%" class="bottom left" style="text-align: right;height: 30px;padding: 6px;">Gross</th>
-                <th width="12%" class="bottom left right" style="text-align: right;height: 30px;padding: 6px;">Net Total</th>
+                <th width="50%" class="bottom left top" style="text-align: left;height: 30px;padding: 6px;">Item</th>
+                <th width="12%" class="bottom left top" style="text-align: center;height: 30px;padding: 6px;">Qty</th>
+                <th width="12%" class="bottom left top" style="text-align: center;height: 30px;padding: 6px;">UM</th>
+                <th width="12%" class="bottom left top" style="text-align: right;height: 30px;padding: 6px;">Price</th>
+                <th width="12%" class="bottom left top" style="text-align: right;height: 30px;padding: 6px;">Gross</th>
+                <th width="12%" class="bottom left top right" style="text-align: right;height: 30px;padding: 6px;">Net Total</th>
             </tr>
             </thead>
             <tbody>
@@ -118,35 +124,43 @@
             <tfoot>
 
             <tr>
-                <td colspan="3" class="left top" style="text-align: left;font-weight: bolder; ;height: 30px;padding: 6px;"><b>Remarks<b></td>
-                <td colspan="2" class="left top bottom" style="text-align: left;height: 30px;padding: 6px;">Discount 1 : </td>
-                <td class="top bottom right" style="text-align: right;height: 30px;padding: 6px;"><?php echo number_format($dis_info->total_discount,2); ?></td>
+                <td colspan="3" class="left top bottom" style="text-align: left;font-weight: bolder; ;height: 30px;padding: 10px;"><b>Remarks<b> <?php echo $dis_info->remarks; ?></td>
+
+                <td colspan="2" class=" top" style="text-align: left;height: 30px;padding: 10px;"></td>
+                <td class="top right" style="text-align: right;height: 30px;padding: 10px;"></td>                    
             </tr>
             <tr>
-                <td colspan="3"  class="left bottom" style="text-align: left;height: 30px;padding: 6px;"><?php echo $dis_info->remarks; ?></td>
-                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 6px;">Total before Tax : </td>
-                <td class="bottom right" style="text-align: right;height: 30px;padding: 6px;"><?php echo number_format($dis_info->total_before_tax,2); ?></td>
+                <td colspan="3"  class="left bottom" style="text-align: left;height: 30px;padding: 10px;"><b>Prepared by:</b></td>
+                <td colspan="2" class="left top bottom" style="text-align: left;height: 30px;padding: 10px;">Discount 1 : </td>
+                <td class="top bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($dis_info->total_discount,2); ?></td>
             </tr>
             <tr>
-                <td colspan="3" class="left" style="height: 30px;padding: 6px;"><b>Dispatched / Issued By:</b></td>
-                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 6px;">Tax Amount : </td>
-                <td class="bottom right" style="text-align: right;height: 30px;padding: 6px;"><?php echo number_format($dis_info->total_tax_amount,2); ?></td>
+                <td colspan="3" class="left bottom" style="height: 30px;padding: 10px;"><b>Confirmed by:</b></td>
+                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;">Total before Tax : </td>
+                <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($dis_info->total_before_tax,2); ?></td>
             </tr>
             <tr>
-                <td colspan="3" class="left bottom" style="height: 30px;padding: 6px;">Date:</td>
-                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 6px;">Total after Tax : </td>
-                <td class="bottom right" style="text-align: right;height: 30px;padding: 6px;"><?php echo number_format($dis_info->total_after_tax,2); ?></td>
+                <td colspan="3" class="left bottom" style="height: 30px;padding: 10px;"><b>Check by:</b></td>
+                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;">Tax Amount : </td>
+                <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($dis_info->total_tax_amount,2); ?></td>
             </tr>
             <tr>
-                <td colspan="3" class="left" style="height: 30px;padding: 6px;"><b>Received By:</b></td>
-                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 6px;">Discount 2:</td>
-                <td class="bottom right" style="text-align: right;height: 30px;padding: 6px;"><?php echo number_format($dis_info->total_overall_discount_amount,2); ?></td>
+                <td colspan="3" class="left bottom" style="height: 30px;padding: 10px;"><b>Certified by:</b></td>
+                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;">Total after Tax : </td>
+                <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($dis_info->total_after_tax,2); ?></td>
             </tr>
             <tr>
-                <td colspan="3" class="left bottom bottom" style="height: 30px;padding: 6px;">Date:</td>
-                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 6px;"><strong>Total:</strong></td>
-                <td class="bottom right" style="text-align: right;height: 30px;padding: 6px;"><strong><?php echo number_format($dis_info->total_after_discount,2); ?></strong></td>
+                <td class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Approved by:</b></td>
+                <td colspan="2" class="left bottom bottom" style="height: 30px;padding: 10px;">Date</td>
+                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;">Discount 2:</td>
+                <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($dis_info->total_overall_discount_amount,2); ?></td>
             </tr>
+            <tr>
+                <td class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Received by:</b></td>
+                <td colspan="2" class="left bottom bottom" style="height: 30px;padding: 10px;">Date</td>
+                <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;"><strong>Total:</strong></td>
+                <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><strong><?php echo number_format($dis_info->total_after_discount,2); ?></strong></td>
+            </tr>            
             </tfoot>
         </table><br /><br />
     </center>

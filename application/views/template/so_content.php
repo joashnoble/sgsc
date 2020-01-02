@@ -52,7 +52,7 @@
     <div class="row" style="margin-top: 20px;">
         <table width="100%" class="" cellpadding="3" cellspacing="0">
             <tr>
-                <td width="35%"><strong style="font-size: 10pt;">PURCHASE ORDER</strong></td>
+                <td width="35%"><strong style="font-size: 10pt;">SALES ORDER</strong></td>
                 <td width="30%"></td>
                 <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
                 <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
@@ -63,11 +63,12 @@
                 <td colspan="4"></td>
             </tr>
         </table>
+        
         <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 8pt;">
             <tr>
                 <td width="10%">SOLD TO: </td>
-                <td width="25%" style="border-bottom: 1px solid black;font-size: 10pt;padding-bottom: 0px!important;"><strong><?php echo $sales_order->customer_name; ?></strong></td>
-                <td width="30%"></td>
+                <td width="50%" style="border-bottom: 1px solid black;font-size: 10pt;padding-bottom: 0px!important;"><strong><?php echo $sales_order->customer_name; ?></strong></td>
+                <td width="5%"></td>
 
                 <td width="7%">DATE: </td>
                 <td width="10%"></td>
@@ -77,8 +78,8 @@
         <table  width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 8pt;">
             <tr>
                 <td width="18%">Contact Person/Cell #</td>
-                <td align="right" width="17%"><?php echo $sales_order->contact_no; ?></td>
-                <td width="30%"></td>
+                <td width="42%"><?php echo $sales_order->contact_no; ?></td>
+                <td width="5%"></td>
                 <td width="7%">TERMS:</td>
                 <td width="10%"></td>
                 <td width="18%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo $sales_order->terms; ?></center></td>
@@ -301,7 +302,7 @@
             </tr>    
             <tr>
                 <td colspan="3"></td>
-                <td colspan="3"><center><i>PRODUCTION/RECEIVED BY</i></center></td>
+                <td colspan="3"><center><i>Confirmed by</i></center></td>
             </tr>     
         </table>
         <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 7pt;margin-top: 20px;">
@@ -314,7 +315,7 @@
             <tr>
                 <td colspan="2" style="text-align: justify;text-align-last: left;padding-left: "><u><?php echo $sales_order->remarks;?></u></td>
                 <td></td>
-                <td colspan="3"><center><i>ACCOUNTING</i></center></td>
+                <td colspan="3"><center><i>Check by</i></center></td>
             </tr>   
             <tr>
                 <td colspan="2"></td>
@@ -328,8 +329,22 @@
             </tr> 
             <tr>
                 <td colspan="3"></td>
-                <td colspan="3"><center><i>GENERAL MANAGER</i></center></td>
+                <td colspan="3"><center><i>Certified by</i></center></td>
             </tr> 
+            <tr>
+                <td colspan="2"></td>
+                <td></td>
+                <td colspan="3">&nbsp;</td>
+            </tr>                 
+            <tr>
+                <td colspan="2">&nbsp;</td>
+                <td></td>
+                <td colspan="3" style="border-bottom: 1px solid black;">&nbsp;</td>
+            </tr>             
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="3"><center><i>Approved by</i></center></td>
+            </tr>             
             <tr>
                 <td colspan="6"></td>
             </tr>

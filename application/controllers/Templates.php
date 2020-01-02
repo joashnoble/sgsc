@@ -951,10 +951,10 @@ class Templates extends CORE_Controller {
                 );
 
                 //show only inside grid with menu button
-                // if($type=='fullview'||$type==null){
-                //     echo $this->load->view('template/sales_invoice_content',$data,TRUE);
-                //     echo $this->load->view('template/sales_invoice_content_menus',$data,TRUE);
-                // }
+                if($type=='fullview'||$type==null){
+                    echo $this->load->view('template/sales_invoice_content_wo_header',$data,TRUE);
+                    echo $this->load->view('template/sales_invoice_content_menus',$data,TRUE);
+                }
 
                 //show only inside grid with menu button
                 if($type=='html'){
@@ -991,6 +991,20 @@ class Templates extends CORE_Controller {
                       echo  $this->load->view('template/sales_invoice_content_standard',$data,TRUE); //load the template
 
                 }
+
+                if($type=='deliveryreceipt'){
+                    $file_name=$info[0]->sales_inv_no;
+                    $pdfFilePath = $file_name.".pdf"; //generate filename base on id
+                    $pdf = $this->m_pdf->load(); //pass the instance of the mpdf class
+                    $content=$this->load->view('template/sales_invoice_content_standard_dr',$data,TRUE); //load the template
+                    $pdf->setFooter('{PAGENO}');
+                    
+                    $pdf->WriteHTML($content);
+                    //download it.
+                    $pdf->Output();                    
+                }                
+
+
                 //preview on browser
                 if($type=='contentview'){
                     $file_name=$info[0]->sales_inv_no;
@@ -1098,6 +1112,26 @@ class Templates extends CORE_Controller {
                         array('units','units.unit_id=cash_invoice_items.unit_id','left')
                     )
                 );
+
+                //show only inside grid with menu button
+                if($type=='fullview'||$type==null){
+                    echo $this->load->view('template/cash_invoice_content_wo_header',$data,TRUE);
+                    echo $this->load->view('template/cash_invoice_content_menus',$data,TRUE);
+                }                
+
+
+                if($type=='deliveryreceipt'){
+                    $file_name=$info[0]->sales_inv_no;
+                    $pdfFilePath = $file_name.".pdf"; //generate filename base on id
+                    $pdf = $this->m_pdf->load(); //pass the instance of the mpdf class
+                    $content=$this->load->view('template/cash_invoice_content_standard_dr',$data,TRUE); //load the template
+                    $pdf->setFooter('{PAGENO}');
+                    
+                    $pdf->WriteHTML($content);
+                    //download it.
+                    $pdf->Output();                    
+                }        
+
 
                 //preview on browser
                 if($type=='contentview'){

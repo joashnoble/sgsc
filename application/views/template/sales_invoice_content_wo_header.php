@@ -44,14 +44,9 @@
 .text-right{text-align: right;}
 </style>
 
-<div>
-
-    <div>
-        <?php include 'sgsc_header.php'; ?>
-    </div>
-
+<div style="padding-left: 20px;padding-right: 20px;">
     <br>
-    <table width="100%" class="" cellpadding="3" cellspacing="0">
+    <table width="100%" class="" cellpadding="3" cellspacing="0" style="border:0px!important;">
         <tr>
             <td width="35%"><strong style="font-size: 10pt;">SALES INVOICE</strong></td>
             <td width="30%"></td>
@@ -64,13 +59,13 @@
             <td colspan="4"></td>
         </tr>
     </table>
-    <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 9pt;">
+    <table width="100%" class="" cellpadding="4" cellspacing="0" style="font-size: 9pt;border:0px!important;">
         <tr>
             <td width="16%">CUSTOMER: </td>
             <td width="29%" style="border-bottom: 1px solid black;font-size: 9pt;padding-bottom: 0px!important;"><strong><?php echo $sales_info->customer_name; ?></strong></td>
-            <td width="13%"></td>
+            <td width="14%"></td>
 
-            <td width="12%">DATE: </td>
+            <td width="11%">DATE: </td>
             <td width="20%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo date_format(new DateTime($sales_info->date_invoice),"m/d/Y"); ?></center></td>
         </tr>
         <tr>
@@ -80,17 +75,18 @@
 
             <td width="11%">DUE DATE:</td>
             <td width="20%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($sales_info->date_due),"m/d/Y"); ?></center></td>
-        </tr>   
+        </tr>
         <tr>
             <td width="18%"></td>
             <td align="right" width="17%"></td>
             <td width="30%"></td>
             <td width="13%" style="padding-left: 5px;">DEPARTMENT:</td>
             <td width="22%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $sales_info->department_name; ?></td>
-        </tr>            
+        </tr>                
     </table>
     </div>
     <br>
+    <div style="padding-left: 20px;padding-right: 20px;">
     <center>
         <table width="100%" style="border-collapse: collapse;border-spacing: 0;font-family: tahoma;font-size: 11">
             <thead>
@@ -148,7 +144,7 @@
                 <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><?php echo number_format($sales_info->down_payment,2); ?></td>
             </tr>
             <tr>
-                <td class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Approved by:</b></td>
+                <td class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Approved By:</b></td>
                 <td colspan="2" class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Date:</b></td>
                 <td colspan="2" class="left bottom" style="text-align: left;height: 30px;padding: 10px;"><strong>Total:</strong></td>
                 <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"><strong><?php echo number_format($sales_info->total_after_discount,2); ?></strong></td>
@@ -158,10 +154,11 @@
                 <td colspan="2" class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Date:</b></td>
                 <td colspan="2" class="bottom" style="text-align: left;height: 30px;padding: 10px;"></td>
                 <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"></td>
-            </tr>            
+            </tr>              
             </tfoot>
         </table><br /><br />
-    </center>
+    </center>        
+    </div>
 </div>
 
 

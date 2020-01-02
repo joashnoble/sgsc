@@ -36,7 +36,7 @@
             float: left;
         }
         td.details-control {
-            background: url('assets/img/print.png') no-repeat center center;
+            background: url('assets/img/Folder_Closed.png') no-repeat center center;
             cursor: pointer;
         }
         tr.details td.details-control {
@@ -1117,14 +1117,46 @@ $(document).ready(function(){
     }();
     var bindEventHandlers=(function(){
         var detailRows = [];
+        // $('#tbl_cash_invoice tbody').on( 'click', 'tr td.details-control', function () {
+        //     var tr = $(this).closest('tr');
+        //     var row = dt.row(tr);
+        //     var d=row.data();
+        //     window.open('Templates/layout/cash-invoice/'+ d.cash_invoice_id+'?type=contentview');
+        // } );
+        // $('#link_browse').click(function(){
+        //     $('#btn_receive_so').click();
+        // });
+
+
         $('#tbl_cash_invoice tbody').on( 'click', 'tr td.details-control', function () {
             var tr = $(this).closest('tr');
-            var row = dt.row(tr);
-            var d=row.data();
-            window.open('Templates/layout/cash-invoice/'+ d.cash_invoice_id+'?type=contentview');
-        } );
-        $('#link_browse').click(function(){
-            $('#btn_receive_so').click();
+            var row = dt.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                //console.log(row.data());
+                var d=row.data();
+                $.ajax({
+                    "dataType":"html",
+                    "type":"POST",
+                    "url":"Templates/layout/cash-invoice/"+ d.cash_invoice_id+"?type=fullview",
+                    "beforeSend" : function(){
+                        row.child( '<center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center>' ).show();
+                    }
+                }).done(function(response){
+                    row.child( response,'no-padding' ).show();
+                    // Add to the 'open' array
+                    if ( idx === -1 ) {
+                        detailRows.push( tr.attr('id') );
+                    }
+                });
+            }
         });
 
         $('#tbl_so_list tbody').on( 'click', 'tr td.details-control', function () {

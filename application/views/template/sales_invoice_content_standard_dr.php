@@ -1,5 +1,5 @@
 <head>
-    <title>Sales Invoice</title>
+    <title>Delivery Receipt</title>
     </head>
     <body><style type="text/css" media="print">
   @page { size: portrait; }
@@ -53,7 +53,7 @@
     <br>
     <table width="100%" class="" cellpadding="3" cellspacing="0">
         <tr>
-            <td width="35%"><strong style="font-size: 10pt;">SALES INVOICE</strong></td>
+            <td width="35%"><strong style="font-size: 10pt;">DELIVERY RECEIPT</strong></td>
             <td width="30%"></td>
             <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
             <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
@@ -80,14 +80,14 @@
 
             <td width="11%">DUE DATE:</td>
             <td width="20%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($sales_info->date_due),"m/d/Y"); ?></center></td>
-        </tr>   
+        </tr>
         <tr>
             <td width="18%"></td>
             <td align="right" width="17%"></td>
             <td width="30%"></td>
             <td width="13%" style="padding-left: 5px;">DEPARTMENT:</td>
             <td width="22%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $sales_info->department_name; ?></td>
-        </tr>            
+        </tr>                
     </table>
     </div>
     <br>
@@ -158,7 +158,7 @@
                 <td colspan="2" class="left bottom bottom" style="height: 30px;padding: 10px;"><b>Date:</b></td>
                 <td colspan="2" class="bottom" style="text-align: left;height: 30px;padding: 10px;"></td>
                 <td class="bottom right" style="text-align: right;height: 30px;padding: 10px;"></td>
-            </tr>            
+            </tr>           
             </tfoot>
         </table><br /><br />
     </center>

@@ -92,22 +92,22 @@
         	<td style="padding: 6px;border-bottom: 1px solid gray;height: 30px; border-right: 1px solid gray;" align="right"><?php echo number_format($purchase_info->total_overall_discount,2); ?></td>
         </tr>
         <tr>
-            <td align="left" colspan="2"  style="border-left: 1px solid gray;"></td>
+            <td align="left" colspan="2"  style="border-left: 1px solid gray;"><b>Confirmed By:</b></td>
             <td  colspan="3"  style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-left: 1px solid gray;" align="left">Total Discount :</td>
             <td style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-right: 1px solid gray;" align="right"><?php echo number_format($purchase_info->total_overall_discount_amount +$purchase_info->total_discount ,2); ?></td>
         </tr>
         <tr>
-            <td  align="left" colspan="2"  style="border-bottom: 1px solid gray;border-left: 1px solid gray;"></td>
+            <td  align="left" colspan="2"  style="border-bottom: 1px solid gray;border-left: 1px solid gray;"><b>Check By:</b></td>
             <td colspan="3" style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-left: 1px solid gray;" align="left">Total Before Tax:</td>
             <td style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-right: 1px solid gray;" align="right"><?php echo number_format($purchase_info->total_before_tax,2); ?></td>
         </tr>
         <tr>
-        	<td align="left" colspan="2" style="border-left: 1px solid gray;"><b>Received By:</b></td>
+        	<td align="left" colspan="2" style="border-left: 1px solid gray;"><b>Certified By:</b></td>
         	<td colspan="3" style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-left: 1px solid gray;" align="left">Total Tax Amount:</td>
         	<td style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-right: 1px solid gray;" align="right"><?php echo number_format($purchase_info->total_tax_amount,2); ?></td>
         </tr>
         <tr>
-        	<td align="left" colspan="2" style="border-left: 1px solid gray;" ></td>
+        	<td align="left" colspan="2" style="border-left: 1px solid gray;" ><b>Approved By:</b></td>
         	<td colspan="3" style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-left: 1px solid gray;" align="left">Total After Tax:</td>
         	<td style="padding: 6px;border-bottom: 1px solid gray;height: 30px;border-right: 1px solid gray;" align="right"><?php echo number_format($purchase_info->total_after_tax,2); ?></td>
         </tr>

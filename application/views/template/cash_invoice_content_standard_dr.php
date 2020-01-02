@@ -53,7 +53,7 @@
     <br>
     <table width="100%" class="" cellpadding="3" cellspacing="0">
         <tr>
-            <td width="35%"><strong style="font-size: 10pt;">CASH INVOICE</strong></td>
+            <td width="35%"><strong style="font-size: 10pt;">DELIVERY RECEIPT</strong></td>
             <td width="30%"></td>
             <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
             <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
