@@ -12,7 +12,7 @@ class Dispatching_invoice_model extends CORE_Model
 
 
 	 function list_of_open(){
-	    $sql='SELECT 
+	    $sql='SELECT main.* FROM (SELECT 
 		1 as is_sales,
 		si.sales_invoice_id as invoice_id,
 		si.sales_inv_no as inv_no,
@@ -27,6 +27,7 @@ class Dispatching_invoice_model extends CORE_Model
 		d.department_name,
 		order_status.order_status,
 		si.remarks,
+		si.order_status_id,
 		si.customer_type_id
 
 		FROM sales_invoice si
@@ -53,6 +54,7 @@ class Dispatching_invoice_model extends CORE_Model
 		d.department_name,
 		order_status.order_status,
 		ci.remarks,
+		ci.order_status_id,
 		ci.customer_type_id
 
 		FROM cash_invoice ci
@@ -60,7 +62,9 @@ class Dispatching_invoice_model extends CORE_Model
 		LEFT JOIN departments d ON d.department_id = ci.department_id
 		LEFT JOIN order_status ON order_status.order_status_id=ci.order_status_id
 		WHERE
-		ci.is_deleted=FALSE AND ci.is_active=TRUE ';
+		ci.is_deleted=FALSE AND ci.is_active=TRUE) as main
+
+		order by find_in_set( order_status_id, "3,2,1" ) ';
 
 	         return $this->db->query($sql)->result();
 	    }
