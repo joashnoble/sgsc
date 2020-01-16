@@ -30,7 +30,7 @@ class Sales_order_report extends CORE_Controller {
         $data['title']='Sales Order Report';
         
 
-        (in_array('8-1',$this->session->user_rights)? 
+        (in_array('12-8',$this->session->user_rights)? 
         $this->load->view('sales_order_report_view',$data)
         :redirect(base_url('dashboard')));
     }

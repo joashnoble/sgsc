@@ -219,6 +219,7 @@
                                 <li class="<?php echo (in_array('12-3',$this->session->user_rights)?'':'hidden'); ?>"><a href="Collection_list_report">Collection List Report</a></li>
                                 <li class="<?php echo (in_array('12-4',$this->session->user_rights)?'':'hidden'); ?>"><a href="Open_purchase">Open Purchases</a></li>
                                 <li class="<?php echo (in_array('12-5',$this->session->user_rights)?'':'hidden'); ?>"><a href="Open_sales">Open Sales</a></li>
+                                <li class="<?php echo (in_array('12-8',$this->session->user_rights)?'':'hidden'); ?>"><a href="Sales_order_report">Sales Order Report</a></li>
                             </ul>
                         </li>
                     </ul>

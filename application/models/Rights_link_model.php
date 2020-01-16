@@ -100,7 +100,20 @@ class Rights_link_model extends CORE_Model{
                                           (90,'16','16-2','Quarterly Percentage Tax Return'),
                                           (91,'16','16-3','Certificate of Creditable Tax'),
                                           (92,'6','6-14','Statement of Accounts Settings'),
-                                          (93,'8','8-2','Credit Ceiling Report')
+                                          (93,'8','8-2','Credit Ceiling Report'),
+                                          (94,'17','17-1','Edit Sales Order'),
+                                          (95,'17','17-2','Delete Sales Order'),
+                                          (96,'17','17-3','Edit Warehouse Pull Out'),
+                                          (97,'17','17-4','Delete Warehouse Pull Out'),
+                                          (98,'17','17-5','Edit Sales Invoice'),
+                                          (99,'17','17-6','Delete Sales Invoice'),
+                                          (100,'17','17-7','Edit Cash Invoice'),
+                                          (101,'17','17-8','Delete Cash Invoice'),
+                                          (102,'17','17-9','Edit Dispatching Invoice'),
+                                          (103,'17','17-10','Delete Dispatching Invoice'),
+                                          (104,'12','12-8','Sales Order Report')
+
+
 
 
                                           ON DUPLICATE KEY UPDATE

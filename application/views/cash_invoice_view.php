@@ -947,8 +947,8 @@ $(document).ready(function(){
                 {
                     targets:[7],
                     render: function (data, type, full, meta){
-                        var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
-                        var btn_trash='<button class="btn btn-danger btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
+                        var btn_edit='<button class="btn btn-primary btn-sm <?php echo (in_array('17-7',$this->session->user_rights)?'':'hidden'); ?>" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
+                        var btn_trash='<button class="btn btn-danger btn-sm <?php echo (in_array('17-8',$this->session->user_rights)?'':'hidden'); ?>" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
                         return '<center>'+btn_edit+"&nbsp;"+btn_trash+'</center>';
                     }
                 },

@@ -81,7 +81,7 @@
 
                     <ol class="breadcrumb" style="margin-bottom: 0px;">
                         <li><a href="dashboard">Dashboard</a></li>
-                        <li><a href="Sales_detailed_summary">Sales Report</a></li>
+                        <li><a href="Sales_order_report">Sales Report</a></li>
                     </ol>
 
                     <div class="container-fluid">
