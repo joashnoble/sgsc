@@ -48,7 +48,7 @@ class Issuance_department extends CORE_Controller
         );
 
         $data['title'] = 'Issuance to Department';
-        (in_array('15-5',$this->session->user_rights)? 
+        (in_array('3-6',$this->session->user_rights)? 
         $this->load->view('issuance_department_view', $data)
         :redirect(base_url('dashboard')));
         

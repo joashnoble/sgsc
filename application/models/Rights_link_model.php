@@ -92,7 +92,7 @@ class Rights_link_model extends CORE_Model{
                                           (82,'15','15-1','Product Management (Inventory Tab)'),
                                           (83,'3','3-4','Cash Invoice'),
                                           (84,'6','6-13','Audit Trail'),
-                                          (85,'15','15-5','Item Transfer to Department'),
+                                          (85,'15','3-6','Item Transfer to Department'),
                                           (86,'15','15-6','Stock Card / Bin Card'),
                                           (87,'3','3-5','Warehouse Dispatching'),
                                           (88,'4','4-7','Brands'),

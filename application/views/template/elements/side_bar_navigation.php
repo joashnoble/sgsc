@@ -65,9 +65,10 @@
                         <li class="<?php echo (in_array('3',$this->session->parent_rights)?'':'hidden'); ?>"><a href="#/"><i class="ti ti-shopping-cart"></i><span>Sales</span></a>
                             <ul class="acc-menu">
                                 <li class="<?php echo (in_array('3-1',$this->session->user_rights)?'':'hidden'); ?>"><a href="Sales_order">Sales Order</a></li>
+                                <li class="<?php echo (in_array('3-6',$this->session->user_rights)?'':'hidden'); ?>"><a href="Issuance_department">Warehouse Issue / Pull Out</a></li>
                                 <li class="<?php echo (in_array('3-2',$this->session->user_rights)?'':'hidden'); ?>"><a href="Sales_invoice">Sales Invoice</a></li>
                                 <li class="<?php echo (in_array('3-4',$this->session->user_rights)?'':'hidden'); ?>"><a href="Cash_invoice">Cash Invoice</a></li>
-                                <li class="<?php echo (in_array('3-5',$this->session->user_rights)?'':'hidden'); ?>"><a href="Dispatching">Warehouse Dispatching</a></li>
+                                <li class="<?php echo (in_array('3-5',$this->session->user_rights)?'':'hidden'); ?>"><a href="Dispatching">Dispatching</a></li>
 
                                 <!-- <li><a href="Sales_invoice_other">Other Sales Invoice</a></li> -->
                                 <li class="<?php echo (in_array('3-3',$this->session->user_rights)?'':'hidden'); ?>"><a href="Receivable_payments">Collection Entry</a></li>
@@ -77,7 +78,6 @@
                             <ul class="acc-menu">
                                 <li class="<?php echo (in_array('15-1',$this->session->user_rights)?'':'hidden'); ?>"><a href="products">Product Management</a></li>
                                 <li class="<?php echo (in_array('15-2',$this->session->user_rights)?'':'hidden'); ?>"><a href="Issuances">Item Issuance</a></li>
-                                <li class="<?php echo (in_array('15-5',$this->session->user_rights)?'':'hidden'); ?>"><a href="Issuance_department">Warehouse Issue / Pull Out</a></li>
                                 <li class="<?php echo (in_array('15-3',$this->session->user_rights)?'':'hidden'); ?>"><a href="Adjustments">Item Adjustment</a></li>
                                 <li class="<?php echo (in_array('15-4',$this->session->user_rights)?'':'hidden'); ?>"><a href="Inventory">Inventory</a></li>
                                 <li class="<?php echo (in_array('15-6',$this->session->user_rights)?'':'hidden'); ?>"><a href="Stock_card">Stock Card</a></li>

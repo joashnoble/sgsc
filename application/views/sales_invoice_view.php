@@ -256,9 +256,9 @@
         </div>
         <div>
         <hr>
-            <label class="control-label" style="font-family: Tahoma;"><strong>Enter PLU or Search Item :</strong></label>
-        <button id="refreshproducts" class="btn-primary btn pull-right" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span>  Refresh</button>
-        <div id="custom-templates">
+        <label class="control-label hidden" style="font-family: Tahoma;"><strong>Enter PLU or Search Item :</strong></label>
+        <button id="refreshproducts" class="btn-primary btn pull-right hidden" style="text-transform: capitalize;font-family: Tahoma, Georgia, Serif;"><span class=""></span>  Refresh</button>
+        <div id="custom-templates" class="hidden">
             <input class="typeahead" id="typeaheadsearch" type="text" placeholder="Enter PLU or Search Item">
             <i class="pull-right">Note: Unit Price will depend on chosen Customer Type</i>
         </div><br />
@@ -1608,6 +1608,7 @@ $(document).ready(function(){
                 }
             });
         });
+
         $('#tbl_sales_invoice tbody').on('click','button[name="edit_info"]',function(){
             _selectRowObj=$(this).closest('tr');
             var data=dt.row(_selectRowObj).data();
@@ -2088,7 +2089,7 @@ $(document).ready(function(){
         //DISPLAY
         '<td ><input name="inv_qty[]" type="text" class="numeric form-control trigger-keyup" value="'+accounting.formatNumber(d.inv_qty,2)+'"></td>'+unit+
         '<td ">'+d.product_desc+'<input type="text" style="display:none;" class="form-control" name="is_parent[]" value="'+d.is_parent+'"></td>'+
-        '<td ><input name="inv_price[]" type="text" class="numeric form-control" value="'+accounting.formatNumber(d.inv_price,2)+'" style="text-align:right;"></td>'+
+        '<td ><input name="inv_price[]" type="text" class="numeric form-control" value="'+accounting.formatNumber(d.inv_price,2)+'" style="text-align:right;" readonly></td>'+
         '<td  style=""><input name="inv_discount[]" type="text" class="numeric form-control" value="'+ accounting.formatNumber(d.inv_discount,2)+'" style="text-align:right;"></td>'+
         // DISPLAY NONE
         '<td style="display:none;" ><input name="inv_line_total_discount[]" type="text" class="numeric form-control" value="'+ accounting.formatNumber(d.inv_line_total_discount,2)+'" readonly></td>'+
