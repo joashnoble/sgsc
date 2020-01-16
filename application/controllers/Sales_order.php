@@ -107,8 +107,12 @@ class Sales_order extends CORE_Controller
         switch ($txn){
             case 'list':  //this returns JSON of Issuance to be rendered on Datatable
                 $m_sales_order=$this->Sales_order_model;
+                $stats = $this->input->get('stats');
+                $tsd = date('Y-m-d',strtotime($this->input->get('tsd')));
+                $ted = date('Y-m-d',strtotime($this->input->get('ted')));
+                $additional = " AND DATE(sales_order.date_order) BETWEEN '$tsd' AND '$ted'";
                 $response['data']=$this->response_rows(
-                    'sales_order.is_active=TRUE AND sales_order.is_deleted=FALSE'.($id_filter==null?'':' AND sales_order.sales_order_id='.$id_filter),
+                    'sales_order.is_active=TRUE AND sales_order.is_deleted=FALSE'.($id_filter==null?'':' AND sales_order.sales_order_id='.$id_filter).''.($stats==0?'':' AND sales_order.order_status_id='.$stats).''.($additional==null?'':$additional),
                     'sales_order.sales_order_id DESC'
                 );
                 echo json_encode($response);
