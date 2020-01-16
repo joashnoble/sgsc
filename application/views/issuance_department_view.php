@@ -942,7 +942,7 @@ dt_si = $('#tbl_si_list').DataTable({
                 },
                 { targets:[1],data: "so_no" },
                 { targets:[2],data: "customer_name" },
-                { targets:[3],data: "remarks" },
+                { targets:[3],data: "remarks", render: $.fn.dataTable.render.ellipsis(50) },
                 { targets:[4],data: "date_order" },
                 { targets:[5],data: "order_status" },
                 {
