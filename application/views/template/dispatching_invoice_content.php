@@ -56,7 +56,7 @@
             <td width="30%"></td>
             <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
             <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
-                <center><strong><?php echo $dis_info->dispatching_inv_no; ?></strong></center>
+                <center><strong><?php echo $dis_info->so_no; ?></strong></center>
             </td>
         </tr>
         <tr>
@@ -81,6 +81,15 @@
             <td style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($dis_info->date_due),"m/d/Y"); ?></center></td>
         </tr>  
         <tr>
+            <td>DISPATCHING NO: </td>
+            <td style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><?php echo $dis_info->dispatching_inv_no; ?></td>
+
+            <td></td>
+            <td>FROM:</td>
+            <td style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $dis_info->department_name; ?></td>
+        </tr>     
+        <tr>
+
             <td>INVOICE NO: </td>
             <td style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;">
             <?php 
@@ -91,10 +100,11 @@
                 } 
             ?>                
             </td>
+
             <td></td>
-            <td>FROM:</td>
-            <td style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $dis_info->department_name; ?></td>
-        </tr>              
+            <td></td>
+            <td></td>
+        </tr>                   
     </table>
     <br>
     <center>

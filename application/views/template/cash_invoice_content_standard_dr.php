@@ -57,7 +57,7 @@
             <td width="30%"></td>
             <td width="7%" style="font-size: 10pt;"><strong>NO :</strong> </td>
             <td width="28%" align="right" style="border: 1px solid black;border-left: 1px solid black!important;font-size: 10pt;">
-                <center><strong><?php echo $info->cash_inv_no; ?></strong></center>
+                <center><strong><?php echo $info->so_no; ?></strong></center>
             </td>
         </tr>
         <tr>
@@ -68,10 +68,10 @@
         <tr>
             <td width="20%">CUSTOMER: </td>
             <td width="29%" style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><strong><?php echo $info->customer_name; ?></strong></td>
-            <td width="10%"></td>
+            <td width="5%"></td>
 
-            <td width="14%">DATE: </td>
-            <td width="17%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($info->date_invoice),"m/d/Y"); ?></center></td>
+            <td width="10%">DATE: </td>
+            <td width="36%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><center><?php echo  date_format(new DateTime($info->date_invoice),"m/d/Y"); ?></center></td>
         </tr>
         <tr>
             <td width="15%">EMAIL ADDRESS: </td>
@@ -84,9 +84,9 @@
         <tr>
             <td width="15%">CONTACT PERSON: </td>
             <td width="40%" style="border-bottom: 1px solid black;font-size: 8pt;padding-bottom: 0px!important;"><?php echo $info->contact_person; ?></td>
-
-            <td width="15%"></td>
-            <td width="20%"></td>
+            <td></td>
+            <td width="15%">INVOICE NO: </td>
+            <td width="20%" style="border-bottom: 1px solid black;padding-bottom: 0px!important;"><?php echo $info->cash_inv_no; ?></td>
         </tr>
         <tr>
             <td width="15%">DELIVER TO: </td>

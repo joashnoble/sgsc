@@ -847,6 +847,7 @@ class Templates extends CORE_Controller {
                         'dispatching_invoice.salesperson_id',
                         'dispatching_invoice.address',
                         'sales_invoice.sales_inv_no',
+                        'sales_order.so_no',
                         'CONCAT(salesperson.firstname," ",salesperson.lastname) AS salesperson_name'
                     ),
                     array(
@@ -854,6 +855,7 @@ class Templates extends CORE_Controller {
                         array('salesperson','salesperson.salesperson_id=dispatching_invoice.salesperson_id','left'),
                         array('customers','customers.customer_id=dispatching_invoice.customer_id','left'),
                         array('sales_invoice','sales_invoice.sales_invoice_id=dispatching_invoice.sales_invoice_id','left'),
+                        array('sales_order','sales_order.sales_order_id=sales_invoice.sales_order_id','left'),
                     )
                 );
 

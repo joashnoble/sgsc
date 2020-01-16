@@ -55,7 +55,7 @@
                 <tr>
                     <td style="font-weight: 900;font-size: 13pt;" width="60%">WAREHOUSE PULL OUT FORM</td>
                     <td style="font-weight: 600;font-size: 13pt;" width="15%">NO:</td>
-                    <td style="font-weight: 600;font-size: 13pt;" width="25%"><?php echo $issuance_info->trn_no; ?></td>
+                    <td style="font-weight: 600;font-size: 13pt;" width="25%"><?php echo $issuance_info->po_no; ?></td>
                 </tr>
             </table>
             <table width="100%" class="tbl" cellpadding="5" style="font-size: 9pt;margin-top: 20px;">
@@ -77,8 +77,8 @@
                     <td>TO DEPARTMENT:</td>
                     <td class="bottom"><?php echo $issuance_info->to_department_name; ?></td>
                     <td></td>
-                    <td>P.O. #</td>
-                    <td class="bottom"><?php echo $issuance_info->po_no; ?></td>
+                    <td>TRN NO: </td>
+                    <td class="bottom"><?php echo $issuance_info->trn_no; ?></td>
                 </tr>
             </table>
         </div>
