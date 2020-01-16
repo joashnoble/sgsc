@@ -145,6 +145,32 @@ class Sales_order extends CORE_Controller
                 echo json_encode($response);
                 break;
 
+            case 'open-issued': 
+                $m_sales_order=$this->Sales_order_model;
+                
+                $response['data']= $m_sales_order->get_list(
+
+                    'sales_order.is_deleted=FALSE AND sales_order.is_active=TRUE AND (sales_order.issued_status_id=1 OR sales_order.issued_status_id=3)',
+
+                    array(
+                        'sales_order.*',
+                        'DATE_FORMAT(sales_order.date_order,"%m/%d/%Y") as date_order',
+                        'customers.customer_name',
+                        'customers.salesperson_id as c_salesperson_id',
+                        'order_status.order_status',
+                        'departments.department_name'
+                    ),
+                    array(
+                        array('customers','customers.customer_id=sales_order.customer_id','left'),
+                        array('departments','departments.department_id=sales_order.department_id','left'),
+                        array('order_status','order_status.order_status_id=sales_order.issued_status_id','left')
+                    ),
+                    'sales_order.sales_order_id DESC'
+
+                );
+                echo json_encode($response);
+                break;
+
             ////****************************************items/products of selected Items***********************************************
             case 'item-balance':
                 $m_items=$this->Sales_order_item_model;
@@ -155,6 +181,14 @@ class Sales_order extends CORE_Controller
                 $response['data']=$m_items->get_products_with_balance_qty($id_filter);
                 echo json_encode($response);*/
                 break;
+
+            case 'item-balance-issued':
+                $m_items=$this->Sales_order_item_model;
+                $response['data']=$m_items->get_products_with_balance_qty_issued($id_filter);
+                echo json_encode($response);
+                break;
+
+                
 
             ////****************************************items/products of selected Items***********************************************
             case 'items': //items on the specific PO, loads when edit button is called

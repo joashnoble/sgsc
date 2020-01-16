@@ -15,6 +15,7 @@ class Issuance_department extends CORE_Controller
         $this->load->model('Users_model');
         $this->load->model('Trans_model');
         $this->load->model('Customer_type_model');
+        $this->load->model('Sales_order_model');
 
     }
     public function index() {
@@ -137,6 +138,15 @@ class Issuance_department extends CORE_Controller
                     echo json_encode($response);
                     exit;
                 }
+
+                //get sales order id base on SO number
+                $m_so=$this->Sales_order_model;
+                $arr_so_info=$m_so->get_list(
+                    array('sales_order.so_no'=>$this->input->post('po_no',TRUE)),
+                    'sales_order.sales_order_id'
+                );
+                $sales_order_id=(count($arr_so_info)>0?$arr_so_info[0]->sales_order_id:0);
+
                 $m_issuance->begin();
                 $m_issuance->set('date_created','NOW()'); //treat NOW() as function and not string
                 $m_issuance->remarks=$this->input->post('remarks',TRUE);
@@ -146,6 +156,7 @@ class Issuance_department extends CORE_Controller
                 $m_issuance->to_department_id=$this->input->post('to_department_id',TRUE);
                 $m_issuance->customer_id=$this->input->post('customer',TRUE);
                 $m_issuance->po_no=$this->input->post('po_no',TRUE);
+                $m_issuance->sales_order_id = $sales_order_id;
 
                 // OK
                 $m_issuance->total_discount=$this->get_numeric_value($this->input->post('summary_discount',TRUE));
@@ -197,6 +208,10 @@ class Issuance_department extends CORE_Controller
                 $m_issuance->trn_no='TRN-'.date('Ymd').'-'.$issuance_department_id;
                 $m_issuance->modify($issuance_department_id);
 
+                //update status of so
+                $m_so->issued_status_id=$this->get_issued_status($sales_order_id);
+                $m_so->modify($sales_order_id);
+
                 $m_trans=$this->Trans_model;
                 $m_trans->user_id=$this->session->user_id;
                 $m_trans->set('trans_date','NOW()');
@@ -218,6 +233,15 @@ class Issuance_department extends CORE_Controller
             case 'update':
                 $m_issuance=$this->Issuance_department_model;
                 $issuance_department_id=$this->input->post('issuance_department_id',TRUE);
+
+                //get sales order id base on SO number
+                $m_so=$this->Sales_order_model;
+                $arr_so_info=$m_so->get_list(
+                    array('sales_order.so_no'=>$this->input->post('po_no',TRUE)),
+                    'sales_order.sales_order_id'
+                );
+                $sales_order_id=(count($arr_so_info)>0?$arr_so_info[0]->sales_order_id:0);
+
                 $m_issuance->begin();
 
                 $m_issuance->remarks=$this->input->post('remarks',TRUE);
@@ -227,6 +251,7 @@ class Issuance_department extends CORE_Controller
                 $m_issuance->terms=$this->input->post('terms',TRUE);
                 $m_issuance->customer_id=$this->input->post('customer',TRUE);
                 $m_issuance->po_no=$this->input->post('po_no',TRUE);
+                $m_issuance->sales_order_id = $sales_order_id;
 
                 $m_issuance->total_discount=$this->get_numeric_value($this->input->post('summary_discount',TRUE));
                 $m_issuance->total_before_tax=$this->get_numeric_value($this->input->post('summary_before_discount',TRUE));
@@ -274,6 +299,10 @@ class Issuance_department extends CORE_Controller
                 }
 
 
+                //update status of so
+                $m_so->issued_status_id=$this->get_issued_status($sales_order_id);
+                $m_so->modify($sales_order_id);
+
                 $iss_info=$m_issuance->get_list($issuance_department_id,'trn_no');
                 $m_trans=$this->Trans_model;
                 $m_trans->user_id=$this->session->user_id;
@@ -303,6 +332,16 @@ class Issuance_department extends CORE_Controller
                 $m_issuance->is_deleted=1;
                 $m_issuance->modify($issuance_department_id);
                 //update product on_hand after issuance is deleted...
+
+                $so_info=$m_issuance->get_list($issuance_department_id,'issuance_department_info.sales_order_id');
+
+                if(count($so_info)>0){
+                    $sales_order_id=$so_info[0]->sales_order_id;// pass to variable
+                    $m_so=$this->Sales_order_model;
+                    $m_so->issued_status_id=$this->get_issued_status($sales_order_id);
+                    $m_so->modify($sales_order_id);
+
+                }
 
                 //end update product on_hand after issuance is deleted...
                 $iss_info=$m_issuance->get_list($issuance_department_id,'trn_no');
@@ -353,5 +392,26 @@ class Issuance_department extends CORE_Controller
             'issuance_department_info.issuance_department_id DESC'
         );
     }
+
+
+    function get_issued_status($id){
+        //NOTE : 1 means open, 2 means Closed, 3 means partially invoice
+        $m_issuance=$this->Issuance_department_model;
+
+        if(count($m_issuance->get_list(
+                array('issuance_department_info.sales_order_id'=>$id,'issuance_department_info.is_active'=>TRUE,'issuance_department_info.is_deleted'=>FALSE),
+                'issuance_department_info.issuance_department_id'))==0 ){ //means no SO found on sales invoice that means this so is still open
+
+            return 1;
+
+        }else{
+            $m_so=$this->Sales_order_model;
+            $row=$m_so->get_issued_balance_qty($id);
+            return ($row[0]->Balance>0?3:2);
+        }
+
+    }
+
+
 //***************************************************************************************
 }

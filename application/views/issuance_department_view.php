@@ -206,12 +206,12 @@ echo $_side_bar_navigation;
                     <div class="col-xs-12 col-lg-4">
                     </div>
                     <div class="col-xs-12 col-lg-4 col-lg-offset-8">
-                        P.O # :<br />
+                        S.O # :<br />
                         <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-code"></i>
-                            </span>
                             <input type="text" name="po_no" class="form-control">
+                            <span class="input-group-addon">
+                                <a href="#" id="link_browse" style="text-decoration: none;color:black;"><b>...</b></a>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -553,7 +553,39 @@ echo $_side_bar_navigation;
     </div>
 </div><!---modal-->
 
-
+<div id="modal_so_list" class="modal fade" tabindex="-1" role="dialog"><!--modal-->
+    <div class="modal-dialog" style="width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close"   data-dismiss="modal" aria-hidden="true">X</button>
+                <h2 class="modal-title" style="color: white;"><span id="modal_mode"> </span>Sales Order</h2>
+            </div>
+            <div class="modal-body">
+                <table id="tbl_so_list" class="table table-striped" cellspacing="0" width="100%">
+                    <thead class="">
+                    <tr>
+                        <th></th>
+                        <th>SO#</th>
+                        <th>Customer</th>
+                        <th>Remarks</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th><center>Action</center></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sales Order Content -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+      <!--           <button id="btn_accept" type="button" class="btn btn-green" style="text-transform: none;font-family: Tahoma, Georgia, Serif;">Receive this Order</button> -->
+                <button id="cancel_modal" class="btn btn-default" data-dismiss="modal" style="text-transform: none;font-family: Tahoma, Georgia, Serif;">Cancel</button>
+            </div>
+        </div><!---content---->
+    </div>
+<div class="clearfix"></div>
+</div><!---modal-->
 
 <footer role="contentinfo">
     <div class="clearfix">
@@ -602,7 +634,7 @@ $(document).ready(function(){
     var _productType;
     var _line_unit;
     var _cboDepartmentactive;
-
+    var dt_so;
 
     var oTableItems={
         qty : 'td:eq(0)',
@@ -671,6 +703,122 @@ $(document).ready(function(){
                 }
             });
         });
+
+
+        $('#tbl_so_list > tbody').on('click','button[name="accept_so"]',function(){
+            _selectRowObj=$(this).closest('tr');
+            var data=dt_so.row(_selectRowObj).data();
+
+            $('#typeaheadsearch').val('');
+
+            $('input,textarea').each(function(){
+                var _elem=$(this);
+                $.each(data,function(name,value){
+                    if(_elem.attr('name')==name&&_elem.attr('type')!='password'){
+                        _elem.val(value);
+                    }
+                });
+            });
+
+            $('input[name="po_no"]').val(data.so_no);
+            $('#cbo_departments').select2('val',data.department_id);
+            $('#cbo_customers').select2('val',data.customer_id);
+            $('textarea[name="remarks"]').val(data.remarks);
+            $('input[name="terms"]').val(data.terms);
+
+    
+            $('#modal_so_list').modal('hide');
+            // resetSummary();
+
+
+            $.ajax({
+                url : 'Sales_order/transaction/item-balance-issued/'+data.sales_order_id,
+                type : "GET",
+                cache : false,
+                dataType : 'json',
+                processData : false,
+                contentType : false,
+                beforeSend : function(){
+                    $('#tbl_items > tbody').html('<tr><td align="center" colspan="8"><br /><img src="assets/img/loader/ajax-loader-sm.gif" /><br /><br /></td></tr>');
+                },
+                success : function(response){
+                    var rows=response.data;
+                    $('#tbl_items > tbody').html('');
+
+                    var a = 0; 
+
+
+                    changetxn ='inactive';
+                    $.each(rows,function(i,value){
+
+                    _customer_type_ = value.customer_type_id;
+                    var temp_sale_price=0.00;
+
+                        if(_customer_type_ == '' || _customer_type_ == 0){
+                            temp_sale_price=value.sale_price;
+                        }else if(_customer_type_ == '1' ){ // DISCOUNTED CUSTOMER TYPE
+                            temp_sale_price=value.discounted_price;
+                        }else if(_customer_type_ == '2' ){ // DEALER CUSTOMER TYPE
+                            temp_sale_price=value.dealer_price;
+                        }else if(_customer_type_ == '3' ){ // DISTRIBUTOR CUSTOMER TYPE
+                            temp_sale_price=value.distributor_price;
+                        }else if(_customer_type_ == '4' ){ // PUBLIC CUSTOMER TYPE
+                            temp_sale_price=value.public_price;
+                        }else{
+                            temp_sale_price=value.sale_price;
+                        }
+                        bulk_price = temp_sale_price;
+
+                        var retail_price = 0;
+                        if(value.is_bulk == 1){
+                            retail_price = getFloat(temp_sale_price) / getFloat(value.child_unit_desc);
+
+                        }else if (value.is_bulk== 0){
+                            retail_price = 0;
+                        }
+
+                        $('#tbl_items > tbody').append(newRowItem({
+                            issue_qty : value.so_qty,
+                            product_code : value.product_code,
+                            product_id: value.product_id,
+                            product_desc : value.product_desc,
+                            issue_line_total_discount : value.so_line_total_discount,
+                            tax_exempt : false,
+                            issue_tax_rate : value.so_tax_rate,
+                            issue_price : value.so_price,
+                            issue_discount : value.so_discount,
+                            tax_type_id : null,
+                            issue_line_total_price : value.so_line_total,
+                            issue_non_tax_amount: value.non_tax_amount,
+                            issue_tax_amount:value.tax_amount,
+                            bulk_price: bulk_price,
+                            retail_price: retail_price,
+                            is_bulk: value.is_bulk,
+                            parent_unit_id : getFloat(value.parent_unit_id),
+                            child_unit_id : value.child_unit_id,
+                            child_unit_name : value.child_unit_name,
+                            parent_unit_name : value.parent_unit_name,
+                            is_parent: value.is_parent ,// INITIALLY , UNIT USED IS THE PARENT , 1 for PARENT 0 for CHILD
+                            primary_unit:value.primary_unit,
+                            a:a
+
+                        }));
+                        _line_unit=$('.line_unit'+a).select2({
+                            minimumResultsForSearch: -1
+                        });
+                        _line_unit.select2('val',value.unit_id);
+                        a++;
+                    });
+                changetxn = 'active';
+                $('#txt_overall_discount').val(accounting.formatNumber($('#txt_overall_discount').val(),2));
+                reInitializeNumeric();
+                reComputeTotal();
+                
+                }
+            });
+        });
+
+
     var oTableDetails={
         discount : 'tr:eq(0) > td:eq(1)',
         before_tax : 'tr:eq(1) > td:eq(1)',
@@ -730,9 +878,37 @@ dt_si = $('#tbl_si_list').DataTable({
                 { targets:[6],data: "issuance_department_id",visible: false },
             ]
         });
+
+        dt_so=$('#tbl_so_list').DataTable({
+            "bLengthChange":false,
+            "ajax" : "Sales_order/transaction/open-issued",
+            "columns": [
+                {
+                    "targets": [0],
+                    "class":          "details-control",
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ""
+                },
+                { targets:[1],data: "so_no" },
+                { targets:[2],data: "customer_name" },
+                { targets:[3],data: "remarks" },
+                { targets:[4],data: "date_order" },
+                { targets:[5],data: "order_status" },
+                {
+                    targets:[6],
+                    render: function (data, type, full, meta){
+                        var btn_accept='<button class="btn btn-success btn-sm" name="accept_so"  style="margin-left:-15px;text-transform: none;" data-toggle="tooltip" data-placement="top" title="Create Sales Invoice on SO"><i class="fa fa-check"></i> Accept SO</button>';
+                        return '<center>'+btn_accept+'</center>';
+                    }
+                }
+            ]
+        });
+
         $('#btn_receive_si').click(function(){
             $('#modal_si_list').modal('show');
         });
+
         var createToolBarButton=function(){
             var _btnNew='<button class="btn btn-primary"  id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif;" data-toggle="modal" data-target="" data-placement="left" title="Record Item to Transfer" >'+
                 '<i class="fa fa-plus"></i> Record Item to Transfer</button>';
@@ -946,6 +1122,40 @@ dt_si = $('#tbl_si_list').DataTable({
             }
         });
 
+        $('#tbl_so_list tbody').on( 'click', 'tr td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = dt_so.row( tr );
+            var idx = $.inArray( tr.attr('id'), detailRows );
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+                // Remove from the 'open' array
+                detailRows.splice( idx, 1 );
+            }
+            else {
+                tr.addClass( 'details' );
+                //console.log(row.data());
+                //console.log(tr);
+                _selectRowObj=$(this).closest('tr');
+                var d=dt_so.row(_selectRowObj).data();
+                $.ajax({
+                    "dataType":"html",
+                    "type":"POST",
+                    "url":"Templates/layout/sales-order/"+ d.sales_order_id+'/contentview',
+                    "beforeSend" : function(){
+                        row.child( '<center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center>' ).show();
+                    }
+                }).done(function(response){
+                    row.child( response,'no-padding' ).show();
+                    tr.addClass( 'details' );
+                    // Add to the 'open' array
+                    if ( idx === -1 ) {
+                        detailRows.push( tr.attr('id') );
+                    }
+                });
+            }
+        });
+
         //create new department
         $('#btn_create_department').click(function(){
             var btn=$(this);
@@ -1016,6 +1226,11 @@ dt_si = $('#tbl_si_list').DataTable({
                 showSpinningProgress(btn);
             });
         });
+        $('#link_browse').click(function(){
+            $('#tbl_so_list tbody').html('<tr><td colspan="7"><center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center></td></tr>');
+            dt_so.ajax.reload( null, false );
+            $('#modal_so_list').modal('show');
+        });        
         $('#btn_new').click(function(){
             _txnMode="new";
             $('#item_issuance_title').html('Record Item to Transfer');
@@ -1428,7 +1643,7 @@ dt_si = $('#tbl_si_list').DataTable({
         return '<tr>'+
         '<td width="10%"><input name="issue_qty[]" type="text" class="numeric form-control trigger-number" value="'+ d.issue_qty+'"></td>'+unit+
         '<td width="30%">'+d.product_desc+'<input type="text" style="display: none;" class="form-control" name="is_parent[]" value="'+d.is_parent+'"></td>'+
-        '<td width="11%"><input name="issue_price[]" type="text" class="numeric form-control" value="'+accounting.formatNumber(d.issue_price,2)+'" style="text-align:right;"></td>'+
+        '<td width="11%"><input name="issue_price[]" type="text" class="numeric form-control" value="'+accounting.formatNumber(d.issue_price,2)+'" style="text-align:right;" readonly></td>'+
         '<td width="11%" style="display: none;"><input name="issue_discount[]" type="text" class="numeric form-control" value="'+ accounting.formatNumber(d.issue_discount,2)+'" style="text-align:right;"></td>'+
         '<td style="display: none;" width="11%"><input name="issue_line_total_discount[]" type="text" class="numeric form-control" value="'+ accounting.formatNumber(d.issue_line_total_discount,2)+'" readonly></td>'+
         '<td width="11%" style="display: none;"><input name="issue_tax_rate[]" type="text" class="numeric form-control" value="'+ accounting.formatNumber(d.issue_tax_rate,2)+'"></td>'+
