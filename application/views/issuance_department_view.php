@@ -19,6 +19,10 @@
     <!--/twitter typehead-->
     <link href="assets/plugins/twittertypehead/twitter.typehead.css" rel="stylesheet">
     <style>
+        #tbl_issuances_filter    
+        { 
+            display:none; 
+        }         
         .toolbar{
             float: left;
         }
@@ -92,22 +96,51 @@ echo $_side_bar_navigation;
     <li><a href="Dashboard">Dashboard</a></li>
     <li><a href="Issuance_department">Warehouse Pull Out</a></li>
 </ol>
-<div class="container-fluid"">
+<div class="container-fluid">
 <div data-widget-group="group1">
 <div class="row">
 <div class="col-md-12">
 <div id="div_user_list">
     <div class="panel panel-default">
-<!--         <div class="panel-heading">
-            <b style="color: white; font-size: 12pt;"><i class="fa fa-bars"></i>&nbsp; Issuance</b>
-        </div> -->
         <div class="panel-body table-responsive">
         <h2 class="h2-panel-heading">Warehouse Pull Out</h2><hr>
+
+            <div class="row">
+                
+                <div class="col-lg-3"><br>
+                    <button class="btn btn-primary"  id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif;" data-toggle="modal" data-target="" data-placement="left" title="Record Item to Transfer" ><i class="fa fa-plus"></i> Record Item to Transfer</button>
+                </div>
+                <div class="col-lg-3">
+                    From :<br /> 
+                    <div class="input-group"> 
+                        <input type="text" id="txt_start_date_issuances" name="" class="date-picker form-control" value="<?php echo date("m"); ?>/01/<?php echo date("Y"); ?>"> 
+                         <span class="input-group-addon"> 
+                                <i class="fa fa-calendar"></i> 
+                         </span> 
+                    </div> 
+                </div>
+                <div class="col-lg-3">
+                    To :<br /> 
+                    <div class="input-group"> 
+                        <input type="text" id="txt_end_date_issuances" name="" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>"> 
+                         <span class="input-group-addon"> 
+                                <i class="fa fa-calendar"></i> 
+                         </span> 
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    Search :<br /> 
+                    <input type="text" id="tbl_issuances_search" class="form-control"> 
+                </div>
+            </div>
+            <br>
+
             <table id="tbl_issuances" class="table table-striped" cellspacing="0" width="100%">
                 <thead class="">
                 <tr>
                     <th></th>
                     <th>Transfer #</th>
+                    <th>Date Issued</th>
                     <th>From Department</th>
                     <th>To Department</th>
                     <th>Remarks</th>
@@ -854,7 +887,19 @@ dt_si = $('#tbl_si_list').DataTable({
             "dom": '<"toolbar">frtip',
             "order": [[ 1, "desc" ]],
             "bLengthChange":false,  
-            "ajax" : "Issuance_department/transaction/list",
+            "ajax" : { 
+                "url":"Issuance_department/transaction/list", 
+                "bDestroy": true,             
+                "data": function ( d ) { 
+                        return $.extend( {}, d, { 
+                            "tsd":$('#txt_start_date_issuances').val(), 
+                            "ted":$('#txt_end_date_issuances').val() 
+                        }); 
+                    } 
+            },
+            "language": {
+                "searchPlaceholder":"Search"
+            },
             "columns": [
                 {
                     "targets": [0],
@@ -864,18 +909,22 @@ dt_si = $('#tbl_si_list').DataTable({
                     "defaultContent": ""
                 },
                 { targets:[1],data: "trn_no" },
-                { targets:[2],data: "from_department_name" },
-                { targets:[3],data: "to_department_name" },
-                { targets:[4],data: "remarks" },
+                { targets:[2],data: "date_issued" },
+                { targets:[3],data: "from_department_name" },
+                { targets:[4],data: "to_department_name" },
+                { targets:[5],data: "remarks" },
                 {
-                    targets:[5],
+                    targets:[6],
                     render: function (data, type, full, meta){
-                        var btn_edit='<button class="btn btn-primary btn-sm" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
-                        var btn_trash='<button class="btn btn-red btn-sm" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
+
+                        var btn_edit='<button class="btn btn-primary btn-sm <?php echo (in_array('17-3',$this->session->user_rights)?'':'hidden'); ?>" name="edit_info"  style="margin-left:-15px;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pencil"></i> </button>';
+
+                        var btn_trash='<button class="btn btn-red btn-sm <?php echo (in_array('17-4',$this->session->user_rights)?'':'hidden'); ?>" name="remove_info" style="margin-right:0px;" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </button>';
+
                         return '<center>'+btn_edit+"&nbsp;"+btn_trash+'</center>';
                     }
                 },
-                { targets:[6],data: "issuance_department_id",visible: false },
+                { targets:[7],data: "issuance_department_id",visible: false },
             ]
         });
 
@@ -909,11 +958,18 @@ dt_si = $('#tbl_si_list').DataTable({
             $('#modal_si_list').modal('show');
         });
 
-        var createToolBarButton=function(){
-            var _btnNew='<button class="btn btn-primary"  id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif;" data-toggle="modal" data-target="" data-placement="left" title="Record Item to Transfer" >'+
-                '<i class="fa fa-plus"></i> Record Item to Transfer</button>';
-            $("div.toolbar").html(_btnNew);
-        }();
+         $("#tbl_issuances_search").keyup(function(){          
+                dt 
+                        .search(this.value) 
+                        .draw(); 
+        }); 
+
+        $("#txt_start_date_issuances").on("change", function () {         
+            $('#tbl_issuances').DataTable().ajax.reload() 
+        }); 
+        $("#txt_end_date_issuances").on("change", function () {         
+            $('#tbl_issuances').DataTable().ajax.reload() 
+        }); 
 
         _cboDepartments=$("#cbo_departments").select2({
             placeholder: "Issue item from Department.",

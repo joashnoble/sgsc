@@ -58,8 +58,14 @@ class Issuance_department extends CORE_Controller
         switch ($txn){
             case 'list':  //this returns JSON of Issuance to be rendered on Datatable
                 $m_issuance=$this->Issuance_department_model;
+
+                $tsd = date('Y-m-d',strtotime($this->input->get('tsd')));
+                $ted = date('Y-m-d',strtotime($this->input->get('ted'))); 
+
+                $additional = " AND DATE(issuance_department_info.date_issued) BETWEEN '$tsd' AND '$ted'";
+
                 $response['data']=$this->response_rows(
-                    'issuance_department_info.is_active=TRUE AND issuance_department_info.is_deleted=FALSE'.($id_filter==null?'':' AND issuance_department_info.issuance_department_id='.$id_filter)
+                    'issuance_department_info.is_active=TRUE AND issuance_department_info.is_deleted=FALSE'.($id_filter==null?'':' AND issuance_department_info.issuance_department_id='.$id_filter), $additional
                 );
                 echo json_encode($response);
                 break;
@@ -362,9 +368,9 @@ class Issuance_department extends CORE_Controller
         }
     }
 //**************************************user defined*************************************************
-    function response_rows($filter_value){
+    function response_rows($filter_value,$additional=null){
         return $this->Issuance_department_model->get_list(
-            $filter_value,
+            $filter_value.''.($additional==null?'':$additional),
             array(
                 'issuance_department_info.issuance_department_id',
                 'issuance_department_info.trn_no',
