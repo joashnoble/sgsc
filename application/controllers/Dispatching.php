@@ -85,8 +85,11 @@ class Dispatching extends CORE_Controller
 
             case 'list':  //this returns JSON of Issuance to be rendered on Datatable
                 $m_invoice=$this->Dispatching_invoice_model;
+            $tsd = date('Y-m-d',strtotime($this->input->get('tsd'))); 
+            $ted = date('Y-m-d',strtotime($this->input->get('ted'))); 
+            $additional = " AND DATE(dispatching_invoice.date_invoice) BETWEEN '$tsd' AND '$ted'"; 
                 $response['data']=$m_invoice->get_list(
-                    'dispatching_invoice.is_active=TRUE AND dispatching_invoice.is_deleted=FALSE '.($id_filter==null?'':' AND dispatching_invoice.dispatching_invoice_id='.$id_filter),
+                    'dispatching_invoice.is_active=TRUE AND dispatching_invoice.is_deleted=FALSE '.($id_filter==null?'':' AND dispatching_invoice.dispatching_invoice_id='.$id_filter).''.($additional==null?'':$additional),
 
                     'dispatching_invoice.*,
                     d.department_name,

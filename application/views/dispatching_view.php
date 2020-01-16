@@ -123,6 +123,21 @@
             border-bottom: 1px solid #111;
             width: 100%;
         }
+
+         #tbl_warehouse_dispatching_filter    
+        { 
+            display:none; 
+        } 
+        div.dataTables_processing{  
+        position: absolute!important;  
+        top: 0%!important;  
+        right: -45%!important;  
+        left: auto!important;  
+        width: 100%!important;  
+        height: 40px!important;  
+        background: none!important;  
+        background-color: transparent!important;  
+        }  
     </style>
     <link type="text/css" href="assets/css/light-theme.css" rel="stylesheet">
 </head>
@@ -145,9 +160,36 @@
 <div class="col-md-12">
 <div id="dis_dispatching_invoice_list">
     <div class="panel panel-default">
-        <div class="panel-body table-responsive">
+        <div class="panel-body table-responsive" style="overflow-x: hidden;">
         <div class="row panel-row">
         <h2 class="h2-panel-heading">Warehouse Dispatching</h2><hr>
+                    <div class="row"> 
+                <div class="col-lg-3"><br> 
+                    <button class="btn btn-success" id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif; " data-toggle="modal" data-target="#DispatchingInvoice" data-placement="left" title="Record Dispathing Invoice" ><i class="fa fa-plus"></i> Record Dispathing Invoice</button>
+                </div> 
+                <div class="col-lg-2 col-lg-offset-2"> 
+                        From :<br /> 
+                        <div class="input-group"> 
+                            <input type="text" id="txt_start_date_cash" name="" class="date-picker form-control" value="<?php echo date("m"); ?>/01/<?php echo date("Y"); ?>"> 
+                             <span class="input-group-addon"> 
+                                    <i class="fa fa-calendar"></i> 
+                             </span> 
+                        </div> 
+                </div> 
+                <div class="col-lg-2"> 
+                        To :<br /> 
+                        <div class="input-group"> 
+                            <input type="text" id="txt_end_date_cash" name="" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>"> 
+                             <span class="input-group-addon"> 
+                                    <i class="fa fa-calendar"></i> 
+                             </span> 
+                        </div> 
+                </div> 
+                <div class="col-lg-3"> 
+                        Search :<br /> 
+                         <input type="text" id="tbl_dispatching_search" class="form-control"> 
+                </div> 
+            </div> 
             <table id="tbl_warehouse_dispatching" class="table table-striped" cellspacing="0" width="100%" style="">
                 <thead >
                 <tr>
@@ -302,7 +344,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6" style="height: 50px;">&nbsp;</td>
+                                <td colspan="8" style="height: 50px;">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td style="text-align: right;">Discount %:</td>
@@ -845,10 +887,23 @@ $(document).ready(function(){
             "dom": '<"toolbar">frtip',
             "bLengthChange":false,
             "order": [[ 8, "desc" ]],
-            "ajax" : "Dispatching/transaction/list",
+            "ajax" : { 
+                "url":"Dispatching/transaction/list", 
+                "bDestroy": true,             
+                "data": function ( d ) { 
+                        return $.extend( {}, d, { 
+                            "tsd":$('#txt_start_date_cash').val(), 
+                            "ted":$('#txt_end_date_cash').val() 
+                        }); 
+                    } 
+            }, 
             "language": {
                 "searchPlaceholder":"Search Invoice"
             },
+            oLanguage: { 
+                    sProcessing: '<center><br /><img src="assets/img/loader/ajax-loader-sm.gif" /><br /><br /></center>' 
+            }, 
+            processing : true,
             "columns": [
                 {
                     "targets": [0],
@@ -877,6 +932,7 @@ $(document).ready(function(){
         dt_so=$('#tbl_inv_list').DataTable({
             "bLengthChange":false,
             "ajax" : "Dispatching/transaction/open",
+            "aaSorting": [],
             "columns": [
                 {   visible:false,
                     "targets": [0],
@@ -916,11 +972,6 @@ $(document).ready(function(){
         });
         $('.numeric').autoNumeric('init');
         $('#contact_no').keypress(validateNumber);
-        var createToolBarButton=function(){
-            var _btnNew='<button class="btn btn-success" id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif; " data-toggle="modal" data-target="#DispatchingInvoice" data-placement="left" title="Record Dispathing Invoice" >'+
-                '<i class="fa fa-plus"></i> Record Dispathing Invoice</button>';
-            $("div.toolbar").html(_btnNew);
-        }();
         _cboDepartments=$("#cbo_departments").select2({
             placeholder: "Please select Department.",
             allowClear: true
@@ -1110,6 +1161,20 @@ $(document).ready(function(){
             $('#tbl_inv_list tbody').html('<tr><td colspan="7"><center><br /><img src="assets/img/loader/ajax-loader-lg.gif" /><br /><br /></center></td></tr>');
             dt_so.ajax.reload( null, false );
             $('#modal_so_list').modal('show');
+        });
+
+        $("#txt_start_date_cash").on("change", function () {         
+            $('#tbl_warehouse_dispatching').DataTable().ajax.reload() 
+        }); 
+ 
+         $("#txt_end_date_cash").on("change", function () {         
+            $('#tbl_warehouse_dispatching').DataTable().ajax.reload() 
+        }); 
+
+        $("#tbl_dispatching_search").keyup(function(){          
+                dt 
+                        .search(this.value) 
+                        .draw(); 
         });
         /*_cboCustomers.on('change',function(e){
             var i=$(this).select2('val');

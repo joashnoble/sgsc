@@ -64,7 +64,7 @@ class Dispatching_invoice_model extends CORE_Model
 		WHERE
 		ci.is_deleted=FALSE AND ci.is_active=TRUE) as main
 
-		order by find_in_set( order_status_id, "3,2,1" ) ';
+		order by find_in_set(main.order_status_id, "3,1,2" ) ';
 
 	         return $this->db->query($sql)->result();
 	    }

@@ -107,6 +107,20 @@
         .form-group {
             margin-bottom: 15px;
         }
+        #tbl_sales_invoice_filter    
+        { 
+            display:none; 
+        } 
+        div.dataTables_processing{  
+        position: absolute!important;  
+        top: 0%!important;  
+        right: -45%!important;  
+        left: auto!important;  
+        width: 100%!important;  
+        height: 40px!important;  
+        background: none!important;  
+        background-color: transparent!important;  
+        }  
     </style>
     <link type="text/css" href="assets/css/light-theme.css" rel="stylesheet">
 </head>
@@ -135,6 +149,33 @@
         <div class="panel-body table-responsive">
         <div class="row panel-row">
         <h2 class="h2-panel-heading">Sales Invoice</h2><hr>
+            <div class="row"> 
+                <div class="col-lg-3"><br> 
+                <button class="btn btn-success" id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif; " data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Record Sales Invoice" ><i class="fa fa-plus"></i> Record Sales Invoice</button> 
+                </div> 
+                <div class="col-lg-3"> 
+                        From :<br /> 
+                        <div class="input-group"> 
+                            <input type="text" id="txt_start_date_sales" name="" class="date-picker form-control" value="<?php echo date("m"); ?>/01/<?php echo date("Y"); ?>"> 
+                             <span class="input-group-addon"> 
+                                    <i class="fa fa-calendar"></i> 
+                             </span> 
+                        </div> 
+                </div> 
+                <div class="col-lg-3"> 
+                        To :<br /> 
+                        <div class="input-group"> 
+                            <input type="text" id="txt_end_date_sales" name="" class="date-picker form-control" value="<?php echo date("m/d/Y"); ?>"> 
+                             <span class="input-group-addon"> 
+                                    <i class="fa fa-calendar"></i> 
+                             </span> 
+                        </div> 
+                </div> 
+                <div class="col-lg-3"> 
+                        Search :<br /> 
+                         <input type="text" id="tbl_sales_invoice_search" class="form-control"> 
+                </div> 
+            </div> 
             <table id="tbl_sales_invoice" class="table table-striped" cellspacing="0" width="100%" style="">
                 <thead >
                 <tr>
@@ -895,10 +936,23 @@ $(document).ready(function(){
             "dom": '<"toolbar">frtip',
             "bLengthChange":false,
             "order": [[ 8, "desc" ]],
-            "ajax" : "Sales_invoice/transaction/list_with_count",
+            "ajax" : { 
+                "url":"Sales_invoice/transaction/list", 
+                "bDestroy": true,             
+                "data": function ( d ) { 
+                        return $.extend( {}, d, { 
+                            "tsd":$('#txt_start_date_sales').val(), 
+                            "ted":$('#txt_end_date_sales').val() 
+                        }); 
+                    } 
+            }, 
             "language": {
                 "searchPlaceholder":"Search Invoice"
             },
+            oLanguage: { 
+                    sProcessing: '<center><br /><img src="assets/img/loader/ajax-loader-sm.gif" /><br /><br /></center>' 
+            }, 
+            processing : true,
             "columns": [
                 {
                     "targets": [0],
@@ -951,11 +1005,6 @@ $(document).ready(function(){
         });
         $('.numeric').autoNumeric('init');
         $('#contact_no').keypress(validateNumber);
-        var createToolBarButton=function(){
-            var _btnNew='<button class="btn btn-success" id="btn_new" style="text-transform: none;font-family: Tahoma, Georgia, Serif; " data-toggle="modal" data-target="#salesInvoice" data-placement="left" title="Record Sales Invoice" >'+
-                '<i class="fa fa-plus"></i> Record Sales Invoice</button>';
-            $("div.toolbar").html(_btnNew);
-        }();
         _cboDepartments=$("#cbo_departments").select2({
             placeholder: "Please select Department.",
             allowClear: true
@@ -1267,6 +1316,18 @@ $(document).ready(function(){
             $('#modal_new_salesperson').modal('hide');
         });
 
+
+         $("#tbl_sales_invoice_search").keyup(function(){          
+                dt 
+                        .search(this.value) 
+                        .draw(); 
+        }); 
+        $("#txt_start_date_sales").on("change", function () {         
+            $('#tbl_sales_invoice').DataTable().ajax.reload() 
+        }); 
+        $("#txt_end_date_sales").on("change", function () {         
+            $('#tbl_sales_invoice').DataTable().ajax.reload() 
+        }); 
         //loads modal to create new department
         _cboDepartments.on('select2:select', function(){
             if (_cboDepartments.val() == 0) {
