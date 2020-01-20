@@ -231,7 +231,7 @@
                         <div class="col-sm-3">
                             <label>SO # :</label> <br />
                             <div class="input-group">
-                                <input type="text" name="so_no" class="form-control">
+                                <input type="text" name="so_no" class="form-control" readonly>
                                 <span class="input-group-addon">
                                     <a href="#" id="link_browse" style="text-decoration: none;color:black;"><b>...</b></a>
                                 </span>

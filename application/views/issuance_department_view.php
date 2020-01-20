@@ -886,7 +886,7 @@ dt_si = $('#tbl_si_list').DataTable({
     var initializeControls=function(){
         dt=$('#tbl_issuances').DataTable({
             "dom": '<"toolbar">frtip',
-            "order": [[ 1, "desc" ]],
+            "order": [[ 7, "desc" ]],
             "bLengthChange":false,  
             "ajax" : { 
                 "url":"Issuance_department/transaction/list", 
